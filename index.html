@@ -197,6 +197,14 @@
       font-size: 13px;
       line-height: 1.4;
     }
+    .big-impact {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .big-impact span {
+      font-weight: 800;
+    }
   </style>
 </head>
 <body>
@@ -487,6 +495,7 @@
 
     let weights = {...WEIGHTS};
     if (communityType === "al_mc") {
+      // PDPM not relevant for pure AL/MC
       weights.q5 = 0;
     }
 
@@ -500,36 +509,46 @@
       weightTotal += w;
     });
 
-    const riskScore = weightTotal === 0 ? 0 : weightedSum / weightTotal;
-    const riskScore100 = Math.round(riskScore * 10);
+    const riskScore = weightTotal === 0 ? 0 : weightedSum / weightTotal; // 0–10
+    const riskScore100 = Math.round(riskScore * 10); // 0–100
 
+    // Elasticity impact based on usage level
     let impactPct;
     switch (usageLevel) {
       case "conservative": impactPct = 0.35; break;
-      case "moderate": impactPct = 0.5; break;
-      case "aggressive": impactPct = 0.65; break;
-      default: impactPct = 0.5;
+      case "moderate":     impactPct = 0.50; break;
+      case "aggressive":   impactPct = 0.65; break;
+      default:             impactPct = 0.50;
     }
 
     const impactScore = Math.round(riskScore100 * impactPct);
-    const finalScore = Math.max(0, riskScore100 - impactScore);
+    const finalScore  = Math.max(0, riskScore100 - impactScore);
 
-    const lowValue = Math.round(impactScore * 3000 / 1000) * 1000;
-    const highValue = Math.round(impactScore * 6000 / 1000) * 1000;
+    // --- Financial view (illustrative) ---
+    // Economics influenced by current volatility (before SH)
+    const baselineLow  = Math.round(riskScore100  * 3000 / 1000) * 1000;
+    const baselineHigh = Math.round(riskScore100  * 6000 / 1000) * 1000;
 
-    document.getElementById("riskScoreLabel").textContent = riskScore100 + " / 100";
+    // Economics that SH + Verified could help stabilize
+    const stabilizedLow  = Math.round(impactScore * 3000 / 1000) * 1000;
+    const stabilizedHigh = Math.round(impactScore * 6000 / 1000) * 1000;
+
+    // Update score cards
+    document.getElementById("riskScoreLabel").textContent   = riskScore100 + " / 100";
     document.getElementById("impactScoreLabel").textContent = impactScore + " pts";
-    document.getElementById("finalScoreLabel").textContent = finalScore + " / 100";
+    document.getElementById("finalScoreLabel").textContent  = finalScore + " / 100";
 
     const badgeInfo = classifyRisk(riskScore100);
-    const badgeEl = document.getElementById("riskBadge");
+    const badgeEl   = document.getElementById("riskBadge");
     badgeEl.textContent = badgeInfo.label;
-    badgeEl.className = "score-badge " + badgeInfo.className;
+    badgeEl.className   = "score-badge " + badgeInfo.className;
 
-    document.getElementById("valueSummary").textContent =
-      "Based on your profile and the elasticity level selected, we estimate roughly $" +
-      lowValue.toLocaleString() + "–$" + highValue.toLocaleString() +
-      " in annual economics tied to staffing volatility that a StaffHealth + Accushield Verified model can help stabilize.";
+    // Clear, not-doomy money summary
+    document.getElementById("valueSummary").innerHTML =
+      "<div class='big-impact'>Annual economics currently influenced by staffing volatility: " +
+      "<span>$" + baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "</span></div>" +
+      "<div>Illustrative economics a StaffHealth + Accushield Verified model could help stabilize: " +
+      "<strong>$" + stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "</strong></div>";
 
     let profileText;
     if (riskScore100 < 40) {
@@ -540,7 +559,7 @@
         "You’re in the moderate volatility band: things work, but leaders are feeling the strain. A targeted elasticity layer on weekends and pain-point shifts could materially reduce OT and survey stress.";
     } else {
       profileText =
-        "This profile reflects high volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified program could meaningfully reduce risk and restore capacity.";
+        "This profile reflects higher volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified program could meaningfully reduce risk and restore capacity.";
     }
     document.getElementById("profileSummary").textContent = profileText;
 
@@ -552,15 +571,16 @@
       "Operator Risk Burden Score (Pre-StaffHealth): " + riskScore100 + " / 100\n" +
       "Projected Stability Gain (Elasticity Impact): " + impactScore + " points\n" +
       "Stabilized SHSI (Post-StaffHealth): " + finalScore + " / 100\n\n" +
-      "Estimated Annual Economics at Stake (Illustrative): $" +
-      lowValue.toLocaleString() + "–$" + highValue.toLocaleString() + "\n\n" +
+      "Estimated annual economics currently influenced by staffing volatility: $" +
+      baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "\n" +
+      "Illustrative economics a StaffHealth + Verified model could help stabilize: $" +
+      stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "\n\n" +
       "Usage Level Selected: " + usageLevel + "\n";
 
     document.getElementById("resultsText").value = copyBlock;
 
-    document.getElementById("resultsCard").style.display = "block";
-    document.getElementById("followupCard").style.display = "block";
-
+    document.getElementById("resultsCard").style.display   = "block";
+    document.getElementById("followupCard").style.display  = "block";
     document.getElementById("resultsCard").scrollIntoView({behavior: "smooth"});
   });
 
@@ -569,7 +589,7 @@
       document.getElementById("q" + i).selectedIndex = 0;
     }
     document.getElementById("usageLevel").value = "moderate";
-    document.getElementById("resultsCard").style.display = "none";
+    document.getElementById("resultsCard").style.display  = "none";
     document.getElementById("followupCard").style.display = "none";
   });
 
