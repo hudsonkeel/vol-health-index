@@ -83,7 +83,7 @@
       font-weight: 600;
       margin-bottom: 6px;
     }
-    select, input[type="text"], input[type="email"], textarea {
+    select, input[type="text"], input[type="email"], input[type="number"], textarea {
       width: 100%;
       padding: 8px 10px;
       border-radius: 4px;
@@ -256,7 +256,6 @@
     </p>
 
     <div class="grid grid-2">
-      <!-- 10 questions -->
       <div>
         <label for="q1">Census stability &amp; move-in / move-out patterns</label>
         <select id="q1">
@@ -367,6 +366,39 @@
     </div>
   </div>
 
+  <!-- Rate & hours -->
+  <div class="card">
+    <h2>3. Rate &amp; Hours Snapshot (Optional)</h2>
+    <p class="small" style="margin-bottom:12px;">
+      If you want to see how hourly rates and volatility work together, add a simple comparison here.
+      You can leave this blank and still use the SHSI as a pure volatility / risk view.
+    </p>
+
+    <div class="grid grid-2">
+      <div>
+        <label for="compareRate">Comparison hourly rate ($/hr)</label>
+        <input id="compareRate" type="number" step="0.01" placeholder="e.g., current agency or OT all-in rate" />
+        <div class="hint">
+          This could be your current agency rate or fully loaded overtime rate.
+        </div>
+      </div>
+      <div>
+        <label for="staffRate">StaffHealth proposed hourly rate ($/hr)</label>
+        <input id="staffRate" type="number" step="0.01" placeholder="e.g., 48.00" />
+        <div class="hint">
+          Use the blended StaffHealth rate you&rsquo;d expect for this role.
+        </div>
+      </div>
+      <div>
+        <label for="hoursMonth">Estimated hours per month through StaffHealth</label>
+        <input id="hoursMonth" type="number" step="1" placeholder="e.g., 200" />
+        <div class="hint">
+          Just a directional estimate; the calculator will annualize it.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Results -->
   <div class="card" id="resultsCard" style="display:none;">
     <div class="results-banner">
@@ -409,11 +441,18 @@
         </p>
       </div>
     </div>
+
+    <div style="margin-top:16px;">
+      <div class="pill-header">Rate &amp; Model Narrative</div>
+      <p class="category-summary" id="rateNarrative">
+        &mdash;
+      </p>
+    </div>
   </div>
 
   <!-- Lead capture / copy results -->
   <div class="card" id="followupCard" style="display:none;">
-    <h2>3. Send Yourself the SHSI Results (Optional)</h2>
+    <h2>4. Send Yourself the SHSI Results (Optional)</h2>
     <p class="small">
       If you&rsquo;d like a deeper walkthrough or a portfolio-level view, share your info below.
       You can also copy the results into an email or note for later.
@@ -525,13 +564,32 @@
     const finalScore  = Math.max(0, riskScore100 - impactScore);
 
     // --- Financial view (illustrative) ---
-    // Economics influenced by current volatility (before SH)
     const baselineLow  = Math.round(riskScore100  * 3000 / 1000) * 1000;
     const baselineHigh = Math.round(riskScore100  * 6000 / 1000) * 1000;
 
-    // Economics that SH + Verified could help stabilize
     const stabilizedLow  = Math.round(impactScore * 3000 / 1000) * 1000;
     const stabilizedHigh = Math.round(impactScore * 6000 / 1000) * 1000;
+
+    // Rate inputs
+    const compareRate = parseFloat(document.getElementById("compareRate").value);
+    const staffRate   = parseFloat(document.getElementById("staffRate").value);
+    const hoursMonth  = parseFloat(document.getElementById("hoursMonth").value);
+
+    let hasRateInputs =
+      !isNaN(compareRate) && compareRate > 0 &&
+      !isNaN(staffRate)   && staffRate   > 0 &&
+      !isNaN(hoursMonth)  && hoursMonth  > 0;
+
+    let directAnnual = 0;
+    let netImpact    = 0;
+    let stabilizedMid = (stabilizedLow + stabilizedHigh) / 2;
+
+    if (hasRateInputs) {
+      directAnnual = (compareRate - staffRate) * hoursMonth * 12; // + = savings
+      netImpact    = stabilizedMid + directAnnual;
+    } else {
+      netImpact = stabilizedMid;
+    }
 
     // Update score cards
     document.getElementById("riskScoreLabel").textContent   = riskScore100 + " / 100";
@@ -543,13 +601,34 @@
     badgeEl.textContent = badgeInfo.label;
     badgeEl.className   = "score-badge " + badgeInfo.className;
 
-    // Clear, not-doomy money summary
-    document.getElementById("valueSummary").innerHTML =
+    // Money summary
+    let valueHtml =
       "<div class='big-impact'>Annual economics currently influenced by staffing volatility: " +
       "<span>$" + baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "</span></div>" +
       "<div>Illustrative economics a StaffHealth + Accushield Verified model could help stabilize: " +
       "<strong>$" + stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "</strong></div>";
 
+    if (hasRateInputs) {
+      const directLabel = directAnnual >= 0
+        ? "Estimated direct annual savings from rate:"
+        : "Estimated direct annual premium from rate:";
+      const netLabel = netImpact >= 0
+        ? "Directional annual net benefit (rate + stability):"
+        : "Directional annual net cost (rate + stability):";
+
+      valueHtml +=
+        "<div class='small' style='margin-top:8px;'>" +
+        "<strong>" + directLabel + "</strong> $" + Math.abs(directAnnual).toLocaleString() + "<br/>" +
+        "<strong>" + netLabel + "</strong> $" + Math.abs(netImpact).toLocaleString() +
+        "</div>";
+    } else {
+      valueHtml +=
+        "<div class='small' style='margin-top:8px;'>Rate comparison fields were left blank, so this view focuses on volatility and risk rather than hourly pricing.</div>";
+    }
+
+    document.getElementById("valueSummary").innerHTML = valueHtml;
+
+    // Staffing health narrative
     let profileText;
     if (riskScore100 < 40) {
       profileText =
@@ -563,8 +642,36 @@
     }
     document.getElementById("profileSummary").textContent = profileText;
 
+    // Rate & model narrative
+    let rateNarrative;
+    if (!hasRateInputs) {
+      rateNarrative =
+        "You didn’t enter rate or hours, so this run is a pure volatility and risk view. In follow-up, we can layer in your actual overtime or agency rates to show how the model behaves financially.";
+    } else {
+      const cheaper = staffRate <= compareRate - 1;
+      const equal   = Math.abs(staffRate - compareRate) < 1;
+      const premium = staffRate >= compareRate + 1;
+      const positiveNet = netImpact > 0;
+
+      if (cheaper && positiveNet) {
+        rateNarrative =
+          "Rate and risk both work in your favor with StaffHealth. At your expected hours, we improve your hourly cost and help stabilize a meaningful slice of the volatility economics. This is the kind of profile where a pilot usually pays for itself quickly.";
+      } else if (equal && positiveNet) {
+        rateNarrative =
+          "You’re essentially at rate parity. The upside is in the volatility and risk we can help stabilize, not in chasing a few dollars on the rate card. For operators who care about PBJ, survey, and leadership time, this can still be a strong trade.";
+      } else if (premium && positiveNet) {
+        rateNarrative =
+          "StaffHealth prices as a premium versus your comparison rate, but the stability benefit we estimate is larger than that premium. In PE language, you’re trading a small known cost for a larger reduction in volatility and downside risk.";
+      } else {
+        rateNarrative =
+          "On these specific inputs, the financial signal is weak. It may still be worth revisiting if your comparison rate, mix of hours, or volatility picture changes, but this snapshot doesn’t show a clear economic win on its own.";
+      }
+    }
+    document.getElementById("rateNarrative").textContent = rateNarrative;
+
+    // Copy block for email / CRM
     const state = document.getElementById("state").value || "N/A";
-    const copyBlock =
+    let copyBlock =
       "StaffHealth Stability Index™ (SHSI) – Calculator Results\n\n" +
       "Community Type: " + communityType.toUpperCase() + "\n" +
       "State: " + state + "\n\n" +
@@ -574,8 +681,21 @@
       "Estimated annual economics currently influenced by staffing volatility: $" +
       baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "\n" +
       "Illustrative economics a StaffHealth + Verified model could help stabilize: $" +
-      stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "\n\n" +
-      "Usage Level Selected: " + usageLevel + "\n";
+      stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "\n\n";
+
+    if (hasRateInputs) {
+      copyBlock +=
+        "Comparison rate: $" + compareRate.toFixed(2) + "/hr\n" +
+        "StaffHealth rate: $" + staffRate.toFixed(2) + "/hr\n" +
+        "Estimated hours per month via StaffHealth: " + hoursMonth.toLocaleString() + "\n\n" +
+        "Estimated direct annual impact from rate (positive = savings): $" + directAnnual.toLocaleString() + "\n" +
+        "Directional annual net impact (rate + stability): $" + netImpact.toLocaleString() + "\n\n";
+    } else {
+      copyBlock +=
+        "Rate comparison: Not provided (this run focused on volatility and risk only).\n\n";
+    }
+
+    copyBlock += "Usage Level Selected: " + usageLevel + "\n";
 
     document.getElementById("resultsText").value = copyBlock;
 
@@ -589,6 +709,9 @@
       document.getElementById("q" + i).selectedIndex = 0;
     }
     document.getElementById("usageLevel").value = "moderate";
+    document.getElementById("compareRate").value = "";
+    document.getElementById("staffRate").value = "";
+    document.getElementById("hoursMonth").value = "";
     document.getElementById("resultsCard").style.display  = "none";
     document.getElementById("followupCard").style.display = "none";
   });
