@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --brand-blue: #1f57b8;   /* StaffHealth-style blue */
+      --brand-blue: #1f57b8;
       --dark: #111111;
     }
     * {
@@ -52,7 +52,7 @@
       font-size: 14px;
     }
     .container {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 20px auto 40px;
       padding: 0 15px;
     }
@@ -124,6 +124,20 @@
       opacity: 0.6;
       cursor: default;
     }
+    .mode-toggle {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+    .mode-toggle label {
+      font-weight: 500;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .results-banner {
       background: var(--dark);
       color: #fff;
@@ -144,7 +158,7 @@
     }
     .result-pill {
       flex: 1 1 160px;
-      min-width: 140px;
+      min-width: 160px;
       background: #222;
       border-radius: 6px;
       padding: 10px 8px;
@@ -209,6 +223,24 @@
     .big-impact span {
       font-weight: 800;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 6px 4px;
+      text-align: center;
+    }
+    th {
+      background: #f0f4ff;
+      font-weight: 600;
+    }
+    td.label-cell {
+      text-align: left;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -216,47 +248,68 @@
 <header>
   <h1><span>StaffHealth</span> Stability Index™</h1>
   <p>
-    The SHSI is a directional diagnostic that scores how “healthy” your current staffing model is across
-    10 volatility drivers &mdash; census, OT, PBJ, survey exposure, reimbursement, and leadership bandwidth.
-    In other words: how much risk your building is carrying today, and how much a StaffHealth + Accushield
-    Verified elasticity layer could remove.
+    The SHSI is a directional diagnostic that scores how “healthy” your staffing model is across
+    10 volatility drivers — census, OT, PBJ, survey exposure, reimbursement, and leadership bandwidth.
+    It can be used for a single community or for an entire portfolio.
   </p>
 </header>
 
 <div class="hero-strip">
-  Answer 10 quick questions &mdash; get your StaffHealth Stability Index™ in under 2 minutes.
+  Choose Single Community or Portfolio Mode &mdash; then answer 10 quick questions.
 </div>
 
 <div class="container">
 
-  <!-- Community context -->
+  <!-- Mode toggle -->
   <div class="card">
-    <h2>1. Community Snapshot</h2>
+    <h2>1. Select Mode</h2>
+    <div class="mode-toggle">
+      <label>
+        <input type="radio" name="mode" value="single" checked />
+        Single Community Mode (ED / building-level)
+      </label>
+      <label>
+        <input type="radio" name="mode" value="portfolio" />
+        Portfolio Mode (VP Ops / multi-community roll-up)
+      </label>
+    </div>
+    <div class="hint" style="margin-top:8px;">
+      Single Community Mode lets one building answer all 10 questions. Portfolio Mode lets you input
+      how many communities in your portfolio fall into each risk band for each question.
+    </div>
+  </div>
+
+  <!-- Community snapshot (shared) -->
+  <div class="card">
+    <h2>2. Snapshot</h2>
     <div class="grid grid-2">
       <div>
-        <label for="communityType">Primary Care Level</label>
+        <label for="communityType">Primary Care Level (dominant)</label>
         <select id="communityType">
           <option value="al_mc" selected>Assisted Living / Memory Care</option>
           <option value="snf">Skilled Nursing / Rehab (PDPM)</option>
           <option value="mixed">Mixed Campus (AL/MC + SNF)</option>
         </select>
-        <div class="hint">Used to tailor reimbursement and PDPM-related impact inside your SHSI.</div>
+        <div class="hint">
+          Used to tailor reimbursement and PDPM-related impact inside your SHSI.
+        </div>
       </div>
       <div>
-        <label for="state">State (optional)</label>
+        <label for="state">State / Region (optional)</label>
         <input id="state" type="text" placeholder="TX, GA, FL, etc." />
-        <div class="hint">Helps contextualize benchmarks in follow-up conversations.</div>
+        <div class="hint">
+          Optional context for follow-up discussion.
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Risk questions -->
-  <div class="card">
-    <h2>2. Risk Profile Questions</h2>
+  <!-- SINGLE COMMUNITY SECTION -->
+  <div class="card" id="singleSection">
+    <h2>3. Single Community Risk Profile</h2>
     <p class="small" style="margin-bottom:12px;">
-      For each area, choose the option that best describes your community today. If you&rsquo;re not sure, select
-      <strong>&ldquo;Unknown / Not sure&rdquo;</strong> &mdash; in regulated environments, lack of visibility
-      is itself a risk.
+      For each area, choose the option that best describes this community today. If you&rsquo;re not sure,
+      select <strong>&ldquo;Unknown / Not sure&rdquo;</strong> — lack of visibility is itself a risk.
     </p>
 
     <div class="grid grid-2">
@@ -281,11 +334,12 @@
       <div>
         <label for="q3">Labor model &amp; overtime / call-out pressure</label>
         <select id="q3">
-          <option value="low">Low OT, call-outs manageable</option>
-          <option value="med">Regular OT or last-minute scrambling</option>
-          <option value="high">Heavy OT, daily scrambling, float pool limited</option>
+          <option value="low">Low (0–20 OT hours/month; call-outs manageable)</option>
+          <option value="med">Moderate (20–60 OT hours/month or frequent scrambling)</option>
+          <option value="high">High (60+ OT hours/month; daily scrambling / heavy OT)</option>
           <option value="unk">Unknown / Not sure</option>
         </select>
+        <div class="hint">OT hours are monthly, across all roles.</div>
       </div>
       <div>
         <label for="q4">Survey / regulatory comfort level</label>
@@ -333,7 +387,7 @@
         </select>
       </div>
       <div>
-        <label for="q9">Corporate standardization of staffing partners &amp; credentialing</label>
+        <label for="q9">Corporate standardization (partners &amp; credentialing)</label>
         <select id="q9">
           <option value="low">Single, well-aligned partner &amp; clear process</option>
           <option value="med">Several partners with some variation</option>
@@ -360,56 +414,170 @@
         <option value="aggressive">Strategic (full elasticity model across the building)</option>
       </select>
       <div class="hint">
-        This adjusts the projected stability gain inside your StaffHealth Stability Index™.
+        This adjusts the projected stability gain inside your SHSI.
       </div>
     </div>
 
-    <div style="margin-top:20px;">
-      <button class="btn" id="calcBtn">Calculate My SHSI</button>
-      <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+    <!-- Rate snapshot still only for single-community mode -->
+    <div style="margin-top:24px;">
+      <h3 style="margin-top:0;">Rate &amp; Hours Snapshot (Optional)</h3>
+      <p class="small">
+        If you want to see how hourly rates and volatility work together, add a simple comparison here.
+        You can leave this blank and still use the SHSI as a pure volatility / risk view.
+      </p>
+      <div class="grid grid-2">
+        <div>
+          <label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
+          <input id="compareRate" type="number" step="0.01" placeholder="e.g., 52.00" />
+          <div class="hint">
+            This could be your current agency rate or fully loaded overtime / extra-shift rate.
+          </div>
+        </div>
+        <div>
+          <label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
+          <input id="staffRate" type="number" step="0.01" placeholder="e.g., 49.00" />
+          <div class="hint">
+            Use the blended StaffHealth rate you&rsquo;d expect for this role and shift pattern.
+          </div>
+        </div>
+        <div>
+          <label for="hoursMonth">Estimated hours per month through StaffHealth</label>
+          <input id="hoursMonth" type="number" step="1" placeholder="e.g., 200" />
+          <div class="hint">
+            Just a directional estimate; the calculator will annualize it.
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Rate & hours -->
-  <div class="card">
-    <h2>3. Rate &amp; Hours Snapshot (Optional)</h2>
+  <!-- PORTFOLIO SECTION -->
+  <div class="card" id="portfolioSection" style="display:none;">
+    <h2>3. Portfolio Risk Profile (All Communities)</h2>
     <p class="small" style="margin-bottom:12px;">
-      If you want to see how hourly rates and volatility work together, add a simple comparison here.
-      You can leave this blank and still use the SHSI as a pure volatility / risk view.
+      For each question, enter how many communities in your portfolio fall into each band. This creates an
+      average risk profile per building and a portfolio-level economic view. If a question doesn&rsquo;t apply,
+      leave that row as zeros.
     </p>
 
-    <div class="grid grid-2">
-      <div>
-        <label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
-        <input id="compareRate" type="number" step="0.01" placeholder="e.g., 28.00" />
-        <div class="hint">
-          This could be your current agency rate or fully loaded overtime / extra-shift rate.
-        </div>
-      </div>
-      <div>
-        <label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
-        <input id="staffRate" type="number" step="0.01" placeholder="e.g., 27.00" />
-        <div class="hint">
-          Use the blended StaffHealth rate you&rsquo;d expect for this role and shift pattern.
-        </div>
-      </div>
-      <div>
-        <label for="hoursMonth">Estimated hours per month through StaffHealth</label>
-        <input id="hoursMonth" type="number" step="1" placeholder="e.g., 80" />
-        <div class="hint">
-          Just a directional estimate; the calculator will annualize it.
-        </div>
-      </div>
+    <div class="hint" style="margin-bottom:8px;">
+      Example: If you have 10 communities and 4 are low OT, 4 are medium, and 2 are high, enter 4 / 4 / 2 in the Overtime row.
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th>Low</th>
+            <th>Medium</th>
+            <th>High</th>
+            <th>Unknown</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-cell">1. Census stability</td>
+            <td><input id="q1_low" type="number" min="0" /></td>
+            <td><input id="q1_med" type="number" min="0" /></td>
+            <td><input id="q1_high" type="number" min="0" /></td>
+            <td><input id="q1_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">2. Acuity &amp; flex capacity</td>
+            <td><input id="q2_low" type="number" min="0" /></td>
+            <td><input id="q2_med" type="number" min="0" /></td>
+            <td><input id="q2_high" type="number" min="0" /></td>
+            <td><input id="q2_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">3. Overtime &amp; call-out pressure</td>
+            <td><input id="q3_low" type="number" min="0" /></td>
+            <td><input id="q3_med" type="number" min="0" /></td>
+            <td><input id="q3_high" type="number" min="0" /></td>
+            <td><input id="q3_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">4. Survey / regulatory comfort</td>
+            <td><input id="q4_low" type="number" min="0" /></td>
+            <td><input id="q4_med" type="number" min="0" /></td>
+            <td><input id="q4_high" type="number" min="0" /></td>
+            <td><input id="q4_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">5. Reimbursement &amp; documentation (SNF/PDPM)</td>
+            <td><input id="q5_low" type="number" min="0" /></td>
+            <td><input id="q5_med" type="number" min="0" /></td>
+            <td><input id="q5_high" type="number" min="0" /></td>
+            <td><input id="q5_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">6. Liability exposure</td>
+            <td><input id="q6_low" type="number" min="0" /></td>
+            <td><input id="q6_med" type="number" min="0" /></td>
+            <td><input id="q6_high" type="number" min="0" /></td>
+            <td><input id="q6_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">7. Reputation &amp; referral velocity</td>
+            <td><input id="q7_low" type="number" min="0" /></td>
+            <td><input id="q7_med" type="number" min="0" /></td>
+            <td><input id="q7_high" type="number" min="0" /></td>
+            <td><input id="q7_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">8. Leadership bandwidth</td>
+            <td><input id="q8_low" type="number" min="0" /></td>
+            <td><input id="q8_med" type="number" min="0" /></td>
+            <td><input id="q8_high" type="number" min="0" /></td>
+            <td><input id="q8_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">9. Corporate standardization</td>
+            <td><input id="q9_low" type="number" min="0" /></td>
+            <td><input id="q9_med" type="number" min="0" /></td>
+            <td><input id="q9_high" type="number" min="0" /></td>
+            <td><input id="q9_unk" type="number" min="0" /></td>
+          </tr>
+          <tr>
+            <td class="label-cell">10. PBJ accuracy &amp; staffing star confidence</td>
+            <td><input id="q10_low" type="number" min="0" /></td>
+            <td><input id="q10_med" type="number" min="0" /></td>
+            <td><input id="q10_high" type="number" min="0" /></td>
+            <td><input id="q10_unk" type="number" min="0" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label for="usageLevelPortfolio">If StaffHealth is used as an elasticity layer across the portfolio:</label>
+      <select id="usageLevelPortfolio" style="max-width:320px;">
+        <option value="conservative">Conservative (weekends, true pain points only)</option>
+        <option value="moderate" selected>Moderate (weekends + select dayparts)</option>
+        <option value="aggressive">Strategic (broad portfolio elasticity)</option>
+      </select>
     </div>
   </div>
 
-  <!-- Results -->
+  <!-- ACTION BUTTONS -->
+  <div class="card">
+    <h2>4. Run the SHSI</h2>
+    <p class="small">
+      Click &ldquo;Calculate&rdquo; to see your SHSI score, estimated economics at stake, and a narrative you can
+      use in internal discussions.
+    </p>
+    <button class="btn" id="calcBtn">Calculate SHSI</button>
+    <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+  </div>
+
+  <!-- RESULTS -->
   <div class="card" id="resultsCard" style="display:none;">
     <div class="results-banner">
       <h3>Your StaffHealth Stability Index™ Snapshot</h3>
       <div class="results-row">
         <div class="result-pill">
-          <div class="result-label">Operator Risk Burden (Pre-StaffHealth)</div>
+          <div class="result-label" id="riskLabel">Operator Risk Burden (Pre-StaffHealth)</div>
           <div class="result-value" id="riskScoreLabel">0 / 100</div>
           <div id="riskBadge" class="score-badge"></div>
         </div>
@@ -426,7 +594,7 @@
       </div>
     </div>
 
-    <p class="small">
+    <p class="small" id="modeSummary">
       The StaffHealth Stability Index™ is a directional tool, not a survey or audit. It is designed to open a deeper
       conversation about where volatility, overtime, PBJ, and survey exposure are silently taxing your building.
     </p>
@@ -454,9 +622,9 @@
     </div>
   </div>
 
-  <!-- Lead capture / copy results -->
+  <!-- FOLLOW-UP -->
   <div class="card" id="followupCard" style="display:none;">
-    <h2>4. Send Yourself the SHSI Results (Optional)</h2>
+    <h2>5. Send Yourself the SHSI Results (Optional)</h2>
     <p class="small">
       If you&rsquo;d like a deeper walkthrough or a portfolio-level view, share your info below.
       You can also copy the results into an email or note for later.
@@ -527,72 +695,185 @@
     return {label: "High Volatility", className: "badge-high"};
   }
 
-  document.getElementById("calcBtn").addEventListener("click", function () {
-    const communityType = document.getElementById("communityType").value;
-    const usageLevel = document.getElementById("usageLevel").value;
+  function getMode() {
+    const el = document.querySelector('input[name="mode"]:checked');
+    return el ? el.value : "single";
+  }
 
-    const answers = {};
-    for (let i = 1; i <= 10; i++) {
-      answers["q" + i] = document.getElementById("q" + i).value;
-    }
-
-    let weights = {...WEIGHTS};
-    if (communityType === "al_mc") {
-      // PDPM not relevant for pure AL/MC
-      weights.q5 = 0;
-    }
-
-    let weightedSum = 0;
-    let weightTotal = 0;
-    Object.keys(weights).forEach(key => {
-      const w = weights[key];
-      if (w === 0) return;
-      const r = riskFromAnswer(answers[key]);
-      weightedSum += r * 10 * w;
-      weightTotal += w;
+  // Mode toggle behavior
+  document.querySelectorAll('input[name="mode"]').forEach(r => {
+    r.addEventListener("change", () => {
+      const mode = getMode();
+      const single = document.getElementById("singleSection");
+      const port = document.getElementById("portfolioSection");
+      const riskLabel = document.getElementById("riskLabel");
+      const modeSummary = document.getElementById("modeSummary");
+      if (mode === "single") {
+        single.style.display = "block";
+        port.style.display = "none";
+        riskLabel.textContent = "Operator Risk Burden (Pre-StaffHealth)";
+        modeSummary.textContent =
+          "In Single Community Mode, the SHSI reflects this building’s volatility, overtime, PBJ and survey exposure, and leadership strain. It is directional, not a survey or audit.";
+      } else {
+        single.style.display = "none";
+        port.style.display = "block";
+        riskLabel.textContent = "Average Risk Burden per Community (Portfolio)";
+        modeSummary.textContent =
+          "In Portfolio Mode, the SHSI reflects an average per-community risk profile across your portfolio, based on how many buildings fall into each band for each factor.";
+      }
     });
+  });
 
-    const riskScore = weightTotal === 0 ? 0 : weightedSum / weightTotal; // 0–10
-    const riskScore100 = Math.round(riskScore * 10); // 0–100
+  document.getElementById("calcBtn").addEventListener("click", function () {
+    const mode = getMode();
+    const communityType = document.getElementById("communityType").value;
+    const state = document.getElementById("state").value || "N/A";
 
-    // Elasticity impact based on usage level
-    let impactPct;
-    switch (usageLevel) {
-      case "conservative": impactPct = 0.35; break;
-      case "moderate":     impactPct = 0.50; break;
-      case "aggressive":   impactPct = 0.65; break;
-      default:             impactPct = 0.50;
-    }
-
-    const impactScore = Math.round(riskScore100 * impactPct);
-    const finalScore  = Math.max(0, riskScore100 - impactScore);
-
-    // --- Financial view (illustrative) ---
-    const baselineLow  = Math.round(riskScore100  * 3000 / 1000) * 1000;
-    const baselineHigh = Math.round(riskScore100  * 6000 / 1000) * 1000;
-
-    const stabilizedLow  = Math.round(impactScore * 3000 / 1000) * 1000;
-    const stabilizedHigh = Math.round(impactScore * 6000 / 1000) * 1000;
-
-    // Rate inputs
-    const compareRate = parseFloat(document.getElementById("compareRate").value);
-    const staffRate   = parseFloat(document.getElementById("staffRate").value);
-    const hoursMonth  = parseFloat(document.getElementById("hoursMonth").value);
-
-    let hasRateInputs =
-      !isNaN(compareRate) && compareRate > 0 &&
-      !isNaN(staffRate)   && staffRate   > 0 &&
-      !isNaN(hoursMonth)  && hoursMonth  > 0;
-
+    let riskScore100 = 0;
+    let impactScore = 0;
+    let finalScore = 0;
+    let baselineLow = 0;
+    let baselineHigh = 0;
+    let stabilizedLow = 0;
+    let stabilizedHigh = 0;
+    let avgCommunities = 1;
+    let usageLevel = "moderate";
+    let hasRateInputs = false;
     let directAnnual = 0;
-    let netImpact    = 0;
-    let stabilizedMid = (stabilizedLow + stabilizedHigh) / 2;
+    let netImpact = 0;
 
-    if (hasRateInputs) {
-      directAnnual = (compareRate - staffRate) * hoursMonth * 12; // + = savings
-      netImpact    = stabilizedMid + directAnnual;
+    if (mode === "single") {
+      // SINGLE COMMUNITY LOGIC
+      const answers = {};
+      for (let i = 1; i <= 10; i++) {
+        answers["q" + i] = document.getElementById("q" + i).value;
+      }
+
+      let weights = {...WEIGHTS};
+      if (communityType === "al_mc") {
+        // PDPM not relevant for pure AL/MC
+        weights.q5 = 0;
+      }
+
+      let weightedSum = 0;
+      let weightTotal = 0;
+      Object.keys(weights).forEach(key => {
+        const w = weights[key];
+        if (w === 0) return;
+        const r = riskFromAnswer(answers[key]);
+        weightedSum += r * 10 * w;
+        weightTotal += w;
+      });
+
+      const riskScore = weightTotal === 0 ? 0 : weightedSum / weightTotal;
+      riskScore100 = Math.round(riskScore * 10);
+
+      usageLevel = document.getElementById("usageLevel").value;
+      let impactPct;
+      switch (usageLevel) {
+        case "conservative": impactPct = 0.35; break;
+        case "moderate":     impactPct = 0.50; break;
+        case "aggressive":   impactPct = 0.65; break;
+        default:             impactPct = 0.50;
+      }
+
+      impactScore = Math.round(riskScore100 * impactPct);
+      finalScore  = Math.max(0, riskScore100 - impactScore);
+
+      // Economics per community
+      baselineLow  = Math.round(riskScore100  * 3000 / 1000) * 1000;
+      baselineHigh = Math.round(riskScore100  * 6000 / 1000) * 1000;
+      stabilizedLow  = Math.round(impactScore * 3000 / 1000) * 1000;
+      stabilizedHigh = Math.round(impactScore * 6000 / 1000) * 1000;
+
+      // Rate inputs
+      const compareRate = parseFloat(document.getElementById("compareRate").value);
+      const staffRate   = parseFloat(document.getElementById("staffRate").value);
+      const hoursMonth  = parseFloat(document.getElementById("hoursMonth").value);
+
+      hasRateInputs =
+        !isNaN(compareRate) && compareRate > 0 &&
+        !isNaN(staffRate)   && staffRate   > 0 &&
+        !isNaN(hoursMonth)  && hoursMonth  > 0;
+
+      const stabilizedMid = (stabilizedLow + stabilizedHigh) / 2;
+
+      if (hasRateInputs) {
+        directAnnual = (compareRate - staffRate) * hoursMonth * 12; // + = savings
+        netImpact    = stabilizedMid + directAnnual;
+      } else {
+        netImpact    = stabilizedMid;
+      }
+
+      avgCommunities = 1;
+
     } else {
+      // PORTFOLIO LOGIC
+      let weights = {...WEIGHTS};
+      if (communityType === "al_mc") {
+        weights.q5 = 0; // PDPM less relevant
+      }
+
+      let weightedSum = 0;
+      let weightTotal = 0;
+      let totalCommunitiesSum = 0;
+      let questionsWithCommunities = 0;
+
+      for (let i = 1; i <= 10; i++) {
+        const key = "q" + i;
+        const w = weights[key];
+        if (w === 0) continue;
+
+        const low = parseInt(document.getElementById(key + "_low").value || "0", 10);
+        const med = parseInt(document.getElementById(key + "_med").value || "0", 10);
+        const high = parseInt(document.getElementById(key + "_high").value || "0", 10);
+        const unk = parseInt(document.getElementById(key + "_unk").value || "0", 10);
+        const total = low + med + high + unk;
+
+        if (total > 0) {
+          totalCommunitiesSum += total;
+          questionsWithCommunities++;
+          const r =
+            (0.2 * low + 0.5 * med + 0.8 * high + 1.0 * unk) / total; // 0–1
+          weightedSum += (r * 10) * w; // 0–10 * weight
+          weightTotal += w;
+        }
+      }
+
+      const riskScore = weightTotal === 0 ? 0 : weightedSum / weightTotal;
+      riskScore100 = Math.round(riskScore * 10);
+
+      // Average number of communities across questions
+      avgCommunities = questionsWithCommunities > 0
+        ? Math.round(totalCommunitiesSum / questionsWithCommunities)
+        : 1;
+
+      usageLevel = document.getElementById("usageLevelPortfolio").value;
+      let impactPct;
+      switch (usageLevel) {
+        case "conservative": impactPct = 0.35; break;
+        case "moderate":     impactPct = 0.50; break;
+        case "aggressive":   impactPct = 0.65; break;
+        default:             impactPct = 0.50;
+      }
+
+      impactScore = Math.round(riskScore100 * impactPct);
+      finalScore  = Math.max(0, riskScore100 - impactScore);
+
+      // Economics per building, then scale by portfolio size
+      const perLow  = Math.round(riskScore100  * 3000 / 1000) * 1000;
+      const perHigh = Math.round(riskScore100  * 6000 / 1000) * 1000;
+      const perStabLow  = Math.round(impactScore * 3000 / 1000) * 1000;
+      const perStabHigh = Math.round(impactScore * 6000 / 1000) * 1000;
+
+      baselineLow  = perLow  * avgCommunities;
+      baselineHigh = perHigh * avgCommunities;
+      stabilizedLow  = perStabLow  * avgCommunities;
+      stabilizedHigh = perStabHigh * avgCommunities;
+
+      const stabilizedMid = (stabilizedLow + stabilizedHigh) / 2;
       netImpact = stabilizedMid;
+      hasRateInputs = false; // not used in portfolio mode
     }
 
     // Update score cards
@@ -607,27 +888,40 @@
 
     // Money summary
     let valueHtml =
-      "<div class='big-impact'>Annual economics currently influenced by staffing volatility: " +
+      "<div class='big-impact'>" +
+      (mode === "single"
+        ? "Annual economics currently influenced by staffing volatility (this community): "
+        : "Estimated annual economics currently influenced by staffing volatility (across portfolio): "
+      ) +
       "<span>$" + baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "</span></div>" +
-      "<div>Illustrative economics a StaffHealth + Accushield Verified model could help stabilize: " +
+      "<div>" +
+      (mode === "single"
+        ? "Illustrative economics a StaffHealth + Accushield Verified model could help stabilize: "
+        : "Illustrative economics a StaffHealth + Accushield Verified model could help stabilize across the portfolio: "
+      ) +
       "<strong>$" + stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "</strong></div>";
 
-    if (hasRateInputs) {
-      const directLabel = directAnnual >= 0
-        ? "Estimated direct annual savings from rate:"
-        : "Estimated direct annual premium from rate:";
-      const netLabel = netImpact >= 0
-        ? "Directional annual net benefit (rate + stability):"
-        : "Directional annual net cost (rate + stability):";
+    if (mode === "single") {
+      if (hasRateInputs) {
+        const directLabel = directAnnual >= 0
+          ? "Estimated direct annual savings from rate:"
+          : "Estimated direct annual premium from rate:";
+        const netLabel = netImpact >= 0
+          ? "Directional annual net benefit (rate + stability):"
+          : "Directional annual net cost (rate + stability):";
 
-      valueHtml +=
-        "<div class='small' style='margin-top:8px;'>" +
-        "<strong>" + directLabel + "</strong> $" + Math.abs(directAnnual).toLocaleString() + "<br/>" +
-        "<strong>" + netLabel + "</strong> $" + Math.abs(netImpact).toLocaleString() +
-        "</div>";
+        valueHtml +=
+          "<div class='small' style='margin-top:8px;'>" +
+          "<strong>" + directLabel + "</strong> $" + Math.abs(directAnnual).toLocaleString() + "<br/>" +
+          "<strong>" + netLabel + "</strong> $" + Math.abs(netImpact).toLocaleString() +
+          "</div>";
+      } else {
+        valueHtml +=
+          "<div class='small' style='margin-top:8px;'>Rate comparison fields were left blank, so this view focuses on volatility and risk rather than hourly pricing.</div>";
+      }
     } else {
       valueHtml +=
-        "<div class='small' style='margin-top:8px;'>Rate comparison fields were left blank, so this view focuses on volatility and risk rather than hourly pricing.</div>";
+        "<div class='small' style='margin-top:8px;'>This is a portfolio-level view using average per-community risk and your distribution of buildings across each band.</div>";
     }
 
     document.getElementById("valueSummary").innerHTML = valueHtml;
@@ -636,70 +930,93 @@
     let profileText;
     if (riskScore100 < 40) {
       profileText =
-        "Your StaffHealth Stability Index™ suggests relatively low volatility today. The opportunity is to protect this stability as census and acuity evolve, especially around weekends and PBJ.";
+        mode === "single"
+          ? "Your StaffHealth Stability Index™ suggests relatively low volatility today. The opportunity is to protect this stability as census and acuity evolve, especially around weekends and PBJ."
+          : "On average, your portfolio reflects relatively low volatility. The opportunity is to protect that stability as census and acuity evolve, and to pay particular attention to the buildings that are already trending higher risk.";
     } else if (riskScore100 < 70) {
       profileText =
-        "You’re in the moderate volatility band: things work, but leaders are feeling the strain. A targeted elasticity layer on weekends and pain-point shifts could materially reduce OT and survey stress.";
+        mode === "single"
+          ? "You’re in the moderate volatility band: things work, but leaders are feeling the strain. A targeted elasticity layer on weekends and pain-point shifts could materially reduce OT and survey stress."
+          : "Your portfolio sits in the moderate volatility band. Operations are working, but leadership is likely absorbing real PBJ, OT, and scheduling pressure. A structured elasticity layer focused on weekends and known pain points could move the average down meaningfully.";
     } else {
       profileText =
-        "This profile reflects higher volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified model could meaningfully reduce risk and restore capacity.";
+        mode === "single"
+          ? "This profile reflects higher volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified model could meaningfully reduce risk and restore capacity."
+          : "This portfolio profile reflects higher volatility on average. Multiple buildings are likely absorbing hidden costs weekly in OT, PBJ, survey prep, and leadership time. A StaffHealth + Accushield Verified model deployed across the right subset of communities could materially reduce downside risk and restore executive bandwidth.";
     }
     document.getElementById("profileSummary").textContent = profileText;
 
     // Rate & model narrative
     let rateNarrative;
-    if (!hasRateInputs) {
+    if (mode === "portfolio") {
       rateNarrative =
-        "You didn’t enter rate or hours, so this run is a pure volatility and risk view. In follow-up, we can layer in your actual overtime or agency rates to show how the model behaves financially.";
+        "This run is a portfolio-level volatility and risk view. In follow-up, we can layer in your actual overtime or agency rates by cohort to show how the model behaves financially, community by community. The core message: volatility, PBJ exposure, and leadership strain are often more expensive than the rate line itself.";
     } else {
-      const cheaper = staffRate <= compareRate - 1;
-      const equal   = Math.abs(staffRate - compareRate) < 1;
-      const premium = staffRate >= compareRate + 1;
-      const positiveNet = netImpact > 0;
-
-      if (cheaper && positiveNet) {
+      if (!hasRateInputs) {
         rateNarrative =
-          "Rate and risk both work in your favor with StaffHealth. At your expected hours, we improve your hourly cost and help stabilize a meaningful slice of the volatility economics. This is the kind of profile where a pilot usually pays for itself quickly.";
-      } else if (equal && positiveNet) {
-        rateNarrative =
-          "You’re essentially at rate parity. The upside is in the volatility and risk we can help stabilize, not in chasing a few dollars on the rate card. For operators who care about PBJ, survey, and leadership time, this can still be a strong trade.";
-      } else if (premium && positiveNet) {
-        rateNarrative =
-          "StaffHealth prices as a premium versus your comparison rate, but the stability benefit we estimate is larger than that premium. In PE language, you’re trading a small known cost for a larger reduction in volatility and downside risk.";
+          "You didn’t enter rate or hours, so this run is a pure volatility and risk view. In follow-up, we can layer in your actual overtime or agency rates to show how the model behaves financially.";
       } else {
-        rateNarrative =
-          "On these specific inputs, the financial signal is weak. It may still be worth revisiting if your comparison rate, mix of hours, or volatility picture changes, but this snapshot doesn’t show a clear economic win on its own.";
+        const compareRate = parseFloat(document.getElementById("compareRate").value);
+        const staffRate   = parseFloat(document.getElementById("staffRate").value);
+        const cheaper = staffRate <= compareRate - 1;
+        const equal   = Math.abs(staffRate - compareRate) < 1;
+        const premium = staffRate >= compareRate + 1;
+        const positiveNet = netImpact > 0;
+
+        if (cheaper && positiveNet) {
+          rateNarrative =
+            "Rate and risk both work in your favor with StaffHealth. At your expected hours, we improve your hourly cost and help stabilize a meaningful slice of the volatility economics. This is the kind of profile where a pilot usually pays for itself quickly.";
+        } else if (equal && positiveNet) {
+          rateNarrative =
+            "You’re essentially at rate parity. The upside is in the volatility and risk we can help stabilize, not in chasing a few dollars on the rate card. For operators who care about PBJ, survey, and leadership time, this can still be a strong trade.";
+        } else if (premium && positiveNet) {
+          rateNarrative =
+            "StaffHealth prices as a premium versus your comparison rate, but the stability benefit we estimate is larger than that premium. In PE language, you’re trading a small known cost for a larger reduction in volatility and downside risk.";
+        } else {
+          rateNarrative =
+            "On these specific inputs, the financial signal is weak. It may still be worth revisiting if your comparison rate, mix of hours, or volatility picture changes, but this snapshot doesn’t show a clear economic win on its own.";
+        }
       }
     }
     document.getElementById("rateNarrative").textContent = rateNarrative;
 
     // Copy block for email / CRM
-    const state = document.getElementById("state").value || "N/A";
     let copyBlock =
       "StaffHealth Stability Index™ (SHSI) – Calculator Results\n\n" +
+      "Mode: " + (mode === "single" ? "Single Community" : "Portfolio") + "\n" +
       "Community Type: " + communityType.toUpperCase() + "\n" +
-      "State: " + state + "\n\n" +
-      "Operator Risk Burden Score (Pre-StaffHealth): " + riskScore100 + " / 100\n" +
+      "State / Region: " + state + "\n\n" +
+      "SHSI Risk Score (Pre-StaffHealth): " + riskScore100 + " / 100\n" +
       "Projected Stability Gain (Elasticity Impact): " + impactScore + " points\n" +
-      "Stabilized SHSI (Post-StaffHealth): " + finalScore + " / 100\n\n" +
-      "Estimated annual economics currently influenced by staffing volatility: $" +
-      baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "\n" +
-      "Illustrative economics a StaffHealth + Verified model could help stabilize: $" +
-      stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "\n\n";
+      "Stabilized SHSI (Post-StaffHealth): " + finalScore + " / 100\n\n";
 
-    if (hasRateInputs) {
-      copyBlock +=
-        "Comparison rate: $" + compareRate.toFixed(2) + "/hr\n" +
-        "StaffHealth rate: $" + staffRate.toFixed(2) + "/hr\n" +
-        "Estimated hours per month via StaffHealth: " + hoursMonth.toLocaleString() + "\n\n" +
-        "Estimated direct annual impact from rate (positive = savings): $" + directAnnual.toLocaleString() + "\n" +
-        "Directional annual net impact (rate + stability): $" + netImpact.toLocaleString() + "\n\n";
+    copyBlock +=
+      (mode === "single"
+        ? "Estimated annual economics currently influenced by staffing volatility (this community): "
+        : "Estimated annual economics currently influenced by staffing volatility (portfolio): ") +
+      "$" + baselineLow.toLocaleString() + "–$" + baselineHigh.toLocaleString() + "\n" +
+      (mode === "single"
+        ? "Illustrative economics a StaffHealth + Verified model could help stabilize (this community): "
+        : "Illustrative economics a StaffHealth + Verified model could help stabilize (portfolio): ") +
+      "$" + stabilizedLow.toLocaleString() + "–$" + stabilizedHigh.toLocaleString() + "\n\n";
+
+    if (mode === "single") {
+      if (hasRateInputs) {
+        copyBlock +=
+          "Comparison rate: $" + parseFloat(document.getElementById("compareRate").value).toFixed(2) + "/hr\n" +
+          "StaffHealth rate: $" + parseFloat(document.getElementById("staffRate").value).toFixed(2) + "/hr\n" +
+          "Estimated hours per month via StaffHealth: " + parseFloat(document.getElementById("hoursMonth").value).toLocaleString() + "\n\n" +
+          "Estimated direct annual impact from rate (positive = savings): $" + directAnnual.toLocaleString() + "\n" +
+          "Directional annual net impact (rate + stability): $" + netImpact.toLocaleString() + "\n\n";
+      } else {
+        copyBlock += "Rate comparison: Not provided (this run focused on volatility and risk only).\n\n";
+      }
+      copyBlock += "Usage Level Selected: " + usageLevel + "\n";
     } else {
       copyBlock +=
-        "Rate comparison: Not provided (this run focused on volatility and risk only).\n\n";
+        "Approximate number of communities represented (average across questions): " + avgCommunities + "\n" +
+        "Usage Level Selected (portfolio): " + usageLevel + "\n";
     }
-
-    copyBlock += "Usage Level Selected: " + usageLevel + "\n";
 
     document.getElementById("resultsText").value = copyBlock;
 
@@ -709,13 +1026,25 @@
   });
 
   document.getElementById("resetBtn").addEventListener("click", function () {
+    // Reset single
     for (let i = 1; i <= 10; i++) {
-      document.getElementById("q" + i).selectedIndex = 0;
+      const sel = document.getElementById("q" + i);
+      if (sel) sel.selectedIndex = 0;
     }
     document.getElementById("usageLevel").value = "moderate";
     document.getElementById("compareRate").value = "";
     document.getElementById("staffRate").value = "";
     document.getElementById("hoursMonth").value = "";
+
+    // Reset portfolio
+    for (let i = 1; i <= 10; i++) {
+      ["low","med","high","unk"].forEach(band => {
+        const el = document.getElementById("q" + i + "_" + band);
+        if (el) el.value = "";
+      });
+    }
+    document.getElementById("usageLevelPortfolio").value = "moderate";
+
     document.getElementById("resultsCard").style.display  = "none";
     document.getElementById("followupCard").style.display = "none";
   });
