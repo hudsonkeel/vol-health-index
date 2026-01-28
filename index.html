@@ -83,7 +83,11 @@
       font-weight: 600;
       margin-bottom: 6px;
     }
-    select, input[type="text"], input[type="email"], input[type="number"], textarea {
+    select,
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    textarea {
       width: 100%;
       padding: 8px 10px;
       border-radius: 4px;
@@ -155,7 +159,7 @@
       font-size: 20px;
       font-weight: 700;
       margin-top: 4px;
-      color: #e0ecff; /* light blue highlight */
+      color: #e0ecff;
     }
     .score-badge {
       display: inline-block;
@@ -376,22 +380,22 @@
 
     <div class="grid grid-2">
       <div>
-        <label for="compareRate">Comparison hourly rate ($/hr)</label>
-        <input id="compareRate" type="number" step="0.01" placeholder="e.g., current agency or OT all-in rate" />
+        <label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
+        <input id="compareRate" type="number" step="0.01" placeholder="e.g., 28.00" />
         <div class="hint">
-          This could be your current agency rate or fully loaded overtime rate.
+          This could be your current agency rate or fully loaded overtime / extra-shift rate.
         </div>
       </div>
       <div>
-        <label for="staffRate">StaffHealth proposed hourly rate ($/hr)</label>
-        <input id="staffRate" type="number" step="0.01" placeholder="e.g., 48.00" />
+        <label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
+        <input id="staffRate" type="number" step="0.01" placeholder="e.g., 27.00" />
         <div class="hint">
-          Use the blended StaffHealth rate you&rsquo;d expect for this role.
+          Use the blended StaffHealth rate you&rsquo;d expect for this role and shift pattern.
         </div>
       </div>
       <div>
         <label for="hoursMonth">Estimated hours per month through StaffHealth</label>
-        <input id="hoursMonth" type="number" step="1" placeholder="e.g., 200" />
+        <input id="hoursMonth" type="number" step="1" placeholder="e.g., 80" />
         <div class="hint">
           Just a directional estimate; the calculator will annualize it.
         </div>
@@ -638,7 +642,7 @@
         "You’re in the moderate volatility band: things work, but leaders are feeling the strain. A targeted elasticity layer on weekends and pain-point shifts could materially reduce OT and survey stress.";
     } else {
       profileText =
-        "This profile reflects higher volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified program could meaningfully reduce risk and restore capacity.";
+        "This profile reflects higher volatility. Leadership, PBJ, and census are likely absorbing hidden costs every week. A structured StaffHealth + Accushield Verified model could meaningfully reduce risk and restore capacity.";
     }
     document.getElementById("profileSummary").textContent = profileText;
 
