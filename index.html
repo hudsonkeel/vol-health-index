@@ -1,300 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>StaffHealth Stability Index™ Calculator (SHSI)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-:root{
---brand-blue:#1f57b8;
---dark:#111111;
---bg:#f5f5f5;
---card:#ffffff;
---border:#d9d9d9;
---muted:#666;
-}
-*{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{margin:0;background:var(--bg);color:#222}
-header{background:var(--dark);color:#fff;text-align:center;padding:28px 15px 18px}
-header h1{margin:0;font-size:30px;letter-spacing:1.2px;text-transform:uppercase}
-header h1 span{color:var(--brand-blue)}
-header p{margin:10px auto 0;max-width:820px;line-height:1.45;font-size:14.5px;color:#e9e9e9}
-.hero-strip{background:var(--brand-blue);color:#fff;padding:14px 16px;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;font-size:13px}
-.container{max-width:1100px;margin:18px auto 38px;padding:0 15px}
-.card{background:var(--card);border-radius:10px;padding:18px 18px 16px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.card h2{margin:0 0 10px;font-size:20px}
-.small{font-size:12px;color:var(--muted);line-height:1.45}
-.grid{display:grid;gap:14px}
-@media(min-width:820px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
-label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
-input[type="text"],input[type="email"],input[type="number"],select,textarea{
-width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);font-size:14px;background:#fff
-}
-textarea{min-height:100px;resize:vertical}
-.hint{font-size:12px;color:var(--muted);margin-top:4px}
-.btn{border:none;background:var(--brand-blue);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:0.6px}
-.btn.secondary{background:#3d3d3d;margin-left:8px}
-.mode-toggle{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.mode-toggle label{font-weight:600;margin:0;display:flex;gap:8px;align-items:center}
-.pill{border:1px solid var(--border);border-radius:10px;padding:14px;background:#fff}
-.pill h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:0.6px;color:#2b2b2b}
-.opt-row{display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:center;padding:8px 0;border-top:1px dashed #ececec}
-.opt-row:first-of-type{border-top:none}
-.opt-label{font-size:13px;line-height:1.35;color:#222}
-.opt-input{display:flex;gap:8px;align-items:center;justify-content:flex-end}
-.opt-input span{font-size:12px;color:var(--muted);white-space:nowrap}
-.opt-input input{width:110px;text-align:right}
-.totals-line{margin-top:10px;font-size:12px;color:var(--muted)}
-.warn{color:#a10000;font-weight:700}
-.ok{color:#176b2c;font-weight:700}
+  <meta charset="UTF-8">
+  <title>StaffHealth Stability Index (SHSI) Prototype</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* Results */
-.results-banner{background:var(--dark);color:#fff;padding:16px;border-radius:12px;text-align:center}
-.results-banner h3{margin:0 0 10px;font-size:18px}
-.results-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.result-pill{flex:1 1 180px;min-width:180px;background:#1c1c1c;border-radius:12px;padding:12px 10px;text-align:center}
-.result-label{font-size:11px;text-transform:uppercase;color:#bfbfbf;letter-spacing:0.6px}
-.result-value{margin-top:6px;font-size:22px;font-weight:900;color:#e0ecff}
-.badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}
-.b-low{background:#d4f5d4;color:#176b2c}
-.b-med{background:#fff2c6;color:#8a5b00}
-.b-high{background:#ffd3d3;color:#a10000}
+  <!-- Inline styles so there are NO external file dependencies -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.4;
+    }
 
-.pill-header{font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:0.6px;color:#444;margin-bottom:6px}
-.big-impact{font-size:15px;font-weight:900;margin-bottom:4px}
-.big-impact span{font-weight:950}
-footer{text-align:center;font-size:12px;color:#888;padding:20px 10px 30px}
-</style>
+    h1, h2 {
+      margin-bottom: 0.4rem;
+    }
+
+    .subheading {
+      color: #555;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .nav-buttons {
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background: #f4f4f4;
+    }
+
+    button.active {
+      background: #007bff;
+      color: #fff;
+      border-color: #007bff;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .form-field {
+      min-width: 180px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.35rem;
+      box-sizing: border-box;
+    }
+
+    .kpi-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .kpi {
+      flex: 1 1 220px;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 0.15rem;
+    }
+
+    .kpi-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #f5f5f5;
+    }
+
+    .note {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
-
 <body>
-<header>
-<h1><span>StaffHealth</span> Stability Index™</h1>
-<p>
-Directional diagnostic that scores staffing “health” across 10 volatility drivers — census, OT, PBJ, survey exposure,
-reimbursement, reputation, and leadership bandwidth. Designed for a single building or an entire portfolio.
-</p>
-</header>
 
-<div class="hero-strip">Single Community Mode or Portfolio Mode — same 10 questions, different interface.</div>
+  <h1>StaffHealth Stability Index (SHSI)</h1>
+  <div class="subheading">
+    Prototype to quantify workforce volatility and the hidden economic impact of PRN reliance, overtime,
+    PBJ exposure, turnover, and schedule instability.
+  </div>
 
-<div class="container">
+  <!-- Simple tab-like nav -->
+  <div class="nav-buttons">
+    <button id="btnSingle" class="active">Single Community View</button>
+    <button id="btnPortfolio">Portfolio View</button>
+  </div>
 
-<div class="card">
-<h2>1. Select Mode</h2>
-<div class="mode-toggle">
-<label><input type="radio" name="mode" value="single" checked> Single Community Mode (ED / building-level)</label>
-<label><input type="radio" name="mode" value="portfolio"> Portfolio Mode (VP Ops / portfolio roll-up)</label>
-</div>
-<div class="hint" style="margin-top:8px;">
-Portfolio Mode lets executives estimate how many communities sit in each answer option for each question — no need to run 20 buildings one-by-one.
-</div>
-</div>
+  <!-- SINGLE COMMUNITY SECTION -->
+  <div id="singleSection" class="section active">
+    <h2>Single Community SHSI</h2>
 
-<div class="card">
-<h2>2. Snapshot</h2>
-<div class="grid grid-2">
-<div>
-<label for="communityType">Primary Care Level (dominant)</label>
-<select id="communityType">
-<option value="al_mc" selected>Assisted Living / Memory Care</option>
-<option value="snf">Skilled Nursing / Rehab (PDPM)</option>
-<option value="mixed">Mixed Campus (AL/MC + SNF)</option>
-</select>
-<div class="hint">Used to tailor PDPM / reimbursement relevance.</div>
-</div>
-<div>
-<label for="state">State / Region (optional)</label>
-<input id="state" type="text" placeholder="TX, GA, FL, etc." />
-<div class="hint">Optional context for follow-up discussion.</div>
-</div>
-</div>
-</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="communityName">Community Name</label>
+        <input type="text" id="communityName" placeholder="e.g., Autumn Leaves of Georgetown">
+      </div>
+      <div class="form-field">
+        <label for="annualAgencyHours">Annual Agency / PRN Hours</label>
+        <input type="number" id="annualAgencyHours" placeholder="e.g., 4800">
+      </div>
+      <div class="form-field">
+        <label for="avgHourlyRateGap">Avg Rate Gap (Agency vs Internal) ($)</label>
+        <input type="number" id="avgHourlyRateGap" step="0.01" placeholder="e.g., 8">
+      </div>
+    </div>
 
-<!-- SINGLE MODE -->
-<div class="card" id="singleSection">
-<h2>3. Single Community Risk Profile</h2>
-<p class="small" style="margin-bottom:12px;">
-Choose the option that best fits today. If you’re not sure, select <b>Unknown / Not sure</b> — lack of visibility is itself a risk.
-</p>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="overtimeHours">Annual Overtime Hours</label>
+        <input type="number" id="overtimeHours" placeholder="e.g., 1200">
+      </div>
+      <div class="form-field">
+        <label for="overtimePremiumPercent">Overtime Premium (%)</label>
+        <input type="number" id="overtimePremiumPercent" placeholder="e.g., 50">
+      </div>
+      <div class="form-field">
+        <label for="turnoverEvents">Annual Turnover Events (care staff)</label>
+        <input type="number" id="turnoverEvents" placeholder="e.g., 12">
+      </div>
+    </div>
 
-<div class="grid grid-2">
-<div>
-<label for="q1">Census stability &amp; move-in / move-out patterns</label>
-<select id="q1">
-<option value="low">Generally stable, rarely delayed</option>
-<option value="med">Some seasonal swings or occasional delays</option>
-<option value="high">Frequent delays, hard to keep census steady</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label for="avgReplacementCost">Avg Cost per Replacement ($)</label>
+        <input type="number" id="avgReplacementCost" step="0.01" placeholder="e.g., 5500">
+      </div>
+      <div class="form-field">
+        <label for="pbjRiskFactor">PBJ / Compliance Risk Factor (0–10)</label>
+        <input type="number" id="pbjRiskFactor" step="0.1" placeholder="e.g., 4">
+      </div>
+      <div class="form-field">
+        <label for="elasticityScore">Schedule Elasticity Score (0–10)</label>
+        <input type="number" id="elasticityScore" step="0.1" placeholder="e.g., 6">
+      </div>
+    </div>
 
-<div>
-<label for="q2">Acuity shifts &amp; ability to flex staffing</label>
-<select id="q2">
-<option value="low">Acuity fairly stable, model flexes well</option>
-<option value="med">Occasional spikes strain the team</option>
-<option value="high">Frequent acuity spikes; team constantly stretched</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+    <button id="btnCalculate">Calculate SHSI</button>
 
-<div>
-<label for="q3">Labor model &amp; overtime / call-out pressure</label>
-<select id="q3">
-<option value="low">Low (0–20 OT hours/month; call-outs manageable)</option>
-<option value="med">Moderate (20–60 OT hours/month or frequent scrambling)</option>
-<option value="high">High (60+ OT hours/month; daily scrambling / heavy OT)</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-<div class="hint">Overtime ranges are monthly, across roles.</div>
-</div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">SHSI Score (0–100; higher = more stable)</div>
+        <div class="kpi-value" id="kpiShsi">–</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Estimated Annual Volatility Cost</div>
+        <div class="kpi-value" id="kpiVolCost">$–</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Stabilizable Upside (StaffHealth + Verified)</div>
+        <div class="kpi-value" id="kpiUpside">$–</div>
+      </div>
+    </div>
 
-<div>
-<label for="q4">Survey / regulatory comfort level</label>
-<select id="q4">
-<option value="low">Clean recent history, few staffing concerns</option>
-<option value="med">Some tags or close calls tied to staffing</option>
-<option value="high">Significant survey risk or recent citations</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+    <div class="note">
+      Note: Model is intentionally conservative and designed for operator feedback. Many volatility
+      costs are “below the P&amp;L waterline” (overtime drag, PBJ exposure, recruitment churn, coverage risk).
+    </div>
+  </div>
 
-<div>
-<label for="q5">Reimbursement &amp; documentation (for SNF/PDPM beds)</label>
-<select id="q5">
-<option value="low">Documentation strong; denials are rare</option>
-<option value="med">Occasional denials or missed skilled minutes</option>
-<option value="high">Frequent corrections, denials, or missed minutes</option>
-<option value="unk">Unknown / Not sure / Not applicable</option>
-</select>
-</div>
+  <!-- PORTFOLIO SECTION -->
+  <div id="portfolioSection" class="section">
+    <h2>Portfolio View</h2>
+    <p class="subheading">
+      Portfolio-level view of SHSI and volatility cost. Edit the data array in the script to reflect your
+      communities, or use this as a reference for your own export data.
+    </p>
 
-<div>
-<label for="q6">Liability exposure (falls, med errors, incidents)</label>
-<select id="q6">
-<option value="low">Incidents infrequent and well managed</option>
-<option value="med">Moderate incident volume with some staffing link</option>
-<option value="high">High incident volume or recent severe events</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+    <div id="portfolioTableContainer">
+      <!-- Table will be injected here -->
+    </div>
 
-<div>
-<label for="q7">Reputation &amp; referral velocity</label>
-<select id="q7">
-<option value="low">Strong reviews and referral relationships</option>
-<option value="med">Mixed reviews or stalled referrals</option>
-<option value="high">Negative staffing-related reviews or referral pullback</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+    <div class="note">
+      Higher SHSI indicates greater workforce stability. Use this view to see where volatility is
+      concentrated and where targeted interventions may unlock the most stabilizable upside.
+    </div>
+  </div>
 
-<div>
-<label for="q8">Leadership bandwidth (ED/DON time spent on staffing)</label>
-<select id="q8">
-<option value="low">Staffing rarely hijacks leadership time</option>
-<option value="med">Staffing issues consume weekly time blocks</option>
-<option value="high">Leaders feel constantly pulled into staffing fires</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+  <!-- Inline JS so there are ZERO external file dependencies -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const btnSingle = document.getElementById("btnSingle");
+      const btnPortfolio = document.getElementById("btnPortfolio");
+      const singleSection = document.getElementById("singleSection");
+      const portfolioSection = document.getElementById("portfolioSection");
 
-<div>
-<label for="q9">Corporate standardization (partners &amp; credentialing)</label>
-<select id="q9">
-<option value="low">Single, well-aligned partner &amp; clear process</option>
-<option value="med">Several partners with some variation</option>
-<option value="high">Many partners; processes and quality vary widely</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
+      function showSection(section) {
+        if (section === "single") {
+          singleSection.classList.add("active");
+          portfolioSection.classList.remove("active");
+          btnSingle.classList.add("active");
+          btnPortfolio.classList.remove("active");
+        } else {
+          singleSection.classList.remove("active");
+          portfolioSection.classList.add("active");
+          btnSingle.classList.remove("active");
+          btnPortfolio.classList.add("active");
+          buildPortfolioTable();
+        }
+      }
 
-<div>
-<label for="q10">PBJ accuracy &amp; Five-Star staffing confidence</label>
-<select id="q10">
-<option value="low">PBJ clean; confident in staffing data</option>
-<option value="med">Some corrections or PBJ-related anxiety</option>
-<option value="high">Frequent corrections, dips, or staffing-star concerns</option>
-<option value="unk">Unknown / Not sure</option>
-</select>
-</div>
-</div>
+      btnSingle.addEventListener("click", function () {
+        showSection("single");
+      });
 
-<div style="margin-top:16px;">
-<label for="usageLevel">If you used StaffHealth as an elasticity layer, how broadly would you expect to use us?</label>
-<select id="usageLevel" style="max-width:380px;">
-<option value="conservative">Conservative (weekends, true pain points only)</option>
-<option value="moderate" selected>Moderate (weekends + select dayparts)</option>
-<option value="aggressive">Strategic (full elasticity model across the building)</option>
-</select>
-<div class="hint">This adjusts the projected stability gain (risk reduction).</div>
-</div>
+      btnPortfolio.addEventListener("click", function () {
+        showSection("portfolio");
+      });
 
-<div style="margin-top:18px;">
-<h3 style="margin:0 0 8px;font-size:15px;">Rate &amp; Hours Snapshot (Optional)</h3>
-<p class="small">
-Add a simple comparison rate and expected hours if you want the tool to incorporate direct rate economics.
-Leave blank to run a pure volatility/risk view.
-</p>
-<div class="grid grid-2">
-<div>
-<label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
-<input id="compareRate" type="number" step="0.01" placeholder="e.g., 28.00" />
-</div>
-<div>
-<label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
-<input id="staffRate" type="number" step="0.01" placeholder="e.g., 27.00" />
-</div>
-<div>
-<label for="hoursMonth">Estimated hours per month through StaffHealth</label>
-<input id="hoursMonth" type="number" step="1" placeholder="e.g., 80" />
-</div>
-</div>
-</div>
-</div>
+      // === SINGLE COMMUNITY CALC LOGIC ===
+      const btnCalculate = document.getElementById("btnCalculate");
+      const kpiShsi = document.getElementById("kpiShsi");
+      const kpiVolCost = document.getElementById("kpiVolCost");
+      const kpiUpside = document.getElementById("kpiUpside");
 
-<!-- PORTFOLIO MODE (NEW UX) -->
-<div class="card" id="portfolioSection" style="display:none;">
-<h2>3. Portfolio Risk Profile (All Communities)</h2>
-<p class="small" style="margin-bottom:10px;">
-For each question, enter how many communities in your portfolio match each option. This creates a portfolio-level view without running the tool community-by-community.
-</p>
+      btnCalculate.addEventListener("click", function () {
+        // Grab values
+        const annualAgencyHours = Number(document.getElementById("annualAgencyHours").value) || 0;
+        const avgHourlyRateGap = Number(document.getElementById("avgHourlyRateGap").value) || 0;
+        const overtimeHours = Number(document.getElementById("overtimeHours").value) || 0;
+        const overtimePremiumPercent = Number(document.getElementById("overtimePremiumPercent").value) || 0;
+        const turnoverEvents = Number(document.getElementById("turnoverEvents").value) || 0;
+        const avgReplacementCost = Number(document.getElementById("avgReplacementCost").value) || 0;
+        const pbjRiskFactor = Number(document.getElementById("pbjRiskFactor").value) || 0;
+        const elasticityScore = Number(document.getElementById("elasticityScore").value) || 0;
 
-<div class="grid grid-2" style="margin-bottom:10px;">
-<div>
-<label for="portfolioN">Portfolio size (optional)</label>
-<input id="portfolioN" type="number" min="0" placeholder="e.g., 18" />
-<div class="hint">If provided, we’ll flag questions where your counts don’t sum to N (sanity check only).</div>
-</div>
-<div>
-<label for="usageLevelPortfolio">Elasticity adoption level (portfolio)</label>
-<select id="usageLevelPortfolio">
-<option value="conservative">Conservative (weekends / true pain points)</option>
-<option value="moderate" selected>Moderate (weekends + select dayparts)</option>
-<option value="aggressive">Strategic (broad portfolio elasticity)</option>
-</select>
-<div class="hint">Adjusts projected risk reduction across the portfolio.</div>
-</div>
-</div>
+        // --- PLACEHOLDER CALC LOGIC ---
+        // NOTE: Replace this with your real SHSI formula.
+        // This is intentionally conservative and simple just so the UI works.
 
-<!-- Helper note -->
-<div class="pill" style="margin-bottom:12px;">
-<h3>How to use</h3>
-<div class="small">
-For each factor, estimate how many communities fit each option. If unsure for a subset, place them in <b>Unknown</b>.
-The tool uses conservative scoring where “unknown” increases risk due to lack of visibility.
-</div>
-</div>
+        const agencyCost = annualAgencyHours * avgHourlyRateGap;
+        const overtimeCost = overtimeHours * (overtimePremiumPercent / 100) * 10; // rough placeholder
+        const turnoverCost = turnoverEvents * avgReplacementCost;
+        const pbjCost = pbjRiskFactor * 5000;        // rough placeholder penalty
+        const elasticityPenalty = (10 - Math.min(elasticityScore, 10)) * 3000;
 
-<!-- Question blocks -->
-<div class="pill" data-q="q1">
-<h3>1) Census stability &amp; move-in / move-out patterns</h3>
-<div class="opt-row">
-<div class="opt-label">Generally stable, rarely delayed</div>
-<div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_low"></div>
-</div>
-<div class="opt-row">
-<div class="opt-label">Some seasonal swings or occasional delays</div>
-<div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_med"></div>
-</div
+        const totalVolatilityCost = agencyCost + overtimeCost + turnoverCost + pbjCost + elasticityPenalty;
+
+        // SHSI score (0–100, higher = more stable).
+        // Start from 100 and subtract scaled volatility signals.
+        let shsi = 100;
+
+        const agencySignal = Math.min(annualAgencyHours / 1000, 20); // cap at 20 points
+        const overtimeSignal = Math.min(overtimeHours / 250, 15);
+        const turnoverSignal = Math.min(turnoverEvents * 1.2, 20);
+        const pbjSignal = Math.min(pbjRiskFactor * 1.5, 15);
+        const elasticitySignal = Math.min((10 - elasticityScore) * 1.5, 20);
+
+        shsi -= (agencySignal + overtimeSignal + turnoverSignal + pbjSignal + elasticitySignal);
+        shsi = Math.max(0, Math.min(100, shsi)); // clamp
+
+        // Assume conservatively that 25% of volatility cost is stabilizable with the right strategy
+        const stabilizableUpside = totalVolatilityCost * 0.25;
+
+        // Update UI
+        kpiShsi.textContent = shsi.toFixed(1);
+        kpiVolCost.textContent = formatCurrency(totalVolatilityCost);
+        kpiUpside.textContent = formatCurrency(stabilizableUpside);
+      });
+
+      function formatCurrency(value) {
+        if (!value || isNaN(value)) return "$–";
+        return "$" + value.toLocaleString(undefined, { maximumFractionDigits: 0 });
+      }
+
+      // === PORTFOLIO VIEW LOGIC ===
+      // Edit this array with real communities / SHSI values once you have them
+      const portfolioData = [
+        {
+          name: "Autumn Leaves of Georgetown",
+          shsi: 78.2,
+          volatilityCost: 185000
+        },
+        {
+          name: "Sample Assisted Living A",
+          shsi: 64.5,
+          volatilityCost: 275000
+        },
+        {
+          name: "Sample Memory Care B",
+          shsi: 52.3,
+          volatilityCost: 345000
+        },
+        {
+          name: "Sample SNF C",
+          shsi: 41.9,
+          volatilityCost: 420000
+        }
+      ];
+
+      function buildPortfolioTable() {
+        const container = document.getElementById("portfolioTableContainer");
+
+        if (!portfolioData || portfolioData.length === 0) {
+          container.innerHTML = "<p>No portfolio data available.</p>";
+          return;
+        }
+
+        let totalVolatility = 0;
+        let totalUpside = 0;
+
+        portfolioData.forEach(item => {
+          totalVolatility += item.volatilityCost || 0;
+          totalUpside += (item.volatilityCost || 0) * 0.25; // same conservative 25% assumption
+        });
+
+        let html = `
+          <table>
+            <thead>
+              <tr>
+                <th>Community</th>
+                <th>SHSI Score (0–100)</th>
+                <th>Estimated Volatility Cost</th>
+                <th>Stabilizable Upside (Est.)</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        portfolioData.forEach(item => {
+          const vc = item.volatilityCost || 0;
+          const upside = vc * 0.25;
+          html += `
+            <tr>
+              <td>${item.name || ""}</td>
+              <td>${item.shsi != null ? item.shsi.toFixed(1) : "–"}</td>
+              <td>${formatCurrency(vc)}</td>
+              <td>${formatCurrency(upside)}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Total Portfolio</th>
+                <th>–</th>
+                <th>${formatCurrency(totalVolatility)}</th>
+                <th>${formatCurrency(totalUpside)}</th>
+              </tr>
+            </tfoot>
+          </table>
+        `;
+
+        container.innerHTML = html;
+      }
+
+      // Optionally build once so it's ready when user clicks
+      buildPortfolioTable();
+    });
+  </script>
+</body>
+</html>
