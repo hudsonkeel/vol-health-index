@@ -632,17 +632,18 @@ function updateRowSums(){
 }
 
 // Live sum updates in portfolio mode
-["portfolioN",
-"p_q1_low","p_q1_med","p_q1_high","p_q1_unk",
-"p_q2_low","p_q2_med","p_q2_high","p_q2_unk",
-"p_q3_low","p_q3_med","p_q3_high","p_q3_unk",
-"p_q4_low","p_q4_med","p_q4_high","p_q4_unk",
-"p_q5_low","p_q5_med","p_q5_high","p_q5_unk",
-"p_q6_low","p_q6_med","p_q6_high","p_q6_unk",
-"p_q7_low","p_q7_med","p_q7_high","p_q7_unk",
-"p_q8_low","p_q8_med","p_q8_high","p_q8_unk",
-"p_q9_low","p_q9_med","p_q9_high","p_q9_unk",
-"p_q10_low","p_q10_med","p_q10_high","p_q10_unk"
+[
+  "portfolioN",
+  "p_q1_low","p_q1_med","p_q1_high","p_q1_unk",
+  "p_q2_low","p_q2_med","p_q2_high","p_q2_unk",
+  "p_q3_low","p_q3_med","p_q3_high","p_q3_unk",
+  "p_q4_low","p_q4_med","p_q4_high","p_q4_unk",
+  "p_q5_low","p_q5_med","p_q5_high","p_q5_unk",
+  "p_q6_low","p_q6_med","p_q6_high","p_q6_unk",
+  "p_q7_low","p_q7_med","p_q7_high","p_q7_unk",
+  "p_q8_low","p_q8_med","p_q8_high","p_q8_unk",
+  "p_q9_low","p_q9_med","p_q9_high","p_q9_unk",
+  "p_q10_low","p_q10_med","p_q10_high","p_q10_unk"
 ].forEach(id=>{
   const el=document.getElementById(id);
   if(el) el.addEventListener("input", updateRowSums);
@@ -656,12 +657,14 @@ document.querySelectorAll('input[name="mode"]').forEach(r=>{
     document.getElementById("portfolioSection").style.display = mode==="portfolio" ? "block" : "none";
 
     document.getElementById("riskLabel").textContent =
-      mode==="single" ? "Baseline SHSI Stability (Pre-StaffHealth)" : "Average SHSI Stability per Community (Portfolio)";
+      mode==="single"
+        ? "Baseline SHSI Stability (Pre-StaffHealth)"
+        : "Average SHSI Stability per Community (Portfolio)";
 
     document.getElementById("modeSummary").textContent =
       mode==="single"
-      ? "In Single Community Mode, the SHSI reflects one building’s volatility, overtime, PBJ exposure, and leadership strain. It is directional, not a survey or audit."
-      : "In Portfolio Mode, the SHSI reflects an average per-community risk/stability profile based on how many communities fit each answer option for each factor.";
+        ? "In Single Community Mode, the SHSI reflects one building’s volatility, overtime, PBJ exposure, and leadership strain. It is directional, not a survey or audit."
+        : "In Portfolio Mode, the SHSI reflects an average per-community risk/stability profile based on how many communities fit each answer option for each factor.";
 
     if(mode==="portfolio") updateRowSums();
   });
@@ -675,6 +678,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   let weights={...WEIGHTS};
   if(communityType==="al_mc") weights.q5 = 0;
 
+  let riskScore100=0, finalRiskScore=0;
   let stabilityPre=0, impactScore=0, finalScore=0;
   let baselineLow=0, baselineHigh=0, stabilizedLow=0, stabilizedHigh=0;
   let netImpact=0, directAnnual=0, hasRates=false;
@@ -695,15 +699,14 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
     }
 
     const riskScore0to10 = weightTotal===0 ? 0 : (weightedRiskSum/weightTotal);
-    const riskScore100 = Math.round(riskScore0to10*10);   // 0–100 risk (higher=worse)
-
-    // Convert to stability (higher=better)
-    stabilityPre = 100 - riskScore100;
+    riskScore100 = Math.round(riskScore0to10*10);   // 0–100 risk (higher=worse)
 
     const usage=document.getElementById("usageLevel").value;
     const impactPct=usageImpactPct(usage);
-    impactScore = Math.round(stabilityPre * impactPct);      // stability points gained
-    finalScore = Math.min(100, stabilityPre + impactScore);
+
+    // ❗ Impact is based on RISK, not stability.
+    impactScore = Math.round(riskScore100 * impactPct);   // risk points removed = stability points gained
+    finalRiskScore = Math.max(0, riskScore100 - impactScore);
 
     // Econ ranges still scale off risk (volatility)
     baselineLow = Math.round(riskScore100*3000/1000)*1000;
@@ -713,9 +716,9 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
 
     // Optional rates (shift-based input → hours)
     const compareRate = parseFloat(document.getElementById("compareRate").value);
-    const staffRate = parseFloat(document.getElementById("staffRate").value);
-    shiftsMonth = parseFloat(document.getElementById("shiftsMonth").value);
-    hoursMonth = !isNaN(shiftsMonth) && shiftsMonth > 0 ? shiftsMonth * 8 : NaN; // 8-hr standard shift
+    const staffRate   = parseFloat(document.getElementById("staffRate").value);
+    shiftsMonth       = parseFloat(document.getElementById("shiftsMonth").value);
+    hoursMonth        = !isNaN(shiftsMonth) && shiftsMonth > 0 ? shiftsMonth * 8 : NaN; // 8-hr standard shift
 
     hasRates =
       !isNaN(compareRate) && compareRate > 0 &&
@@ -753,35 +756,40 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
     }
 
     const riskScore0to10 = weightTotal===0 ? 0 : (weightedRiskSum/weightTotal);
-    const riskScore100 = Math.round(riskScore0to10*10); // 0–100 risk
-
-    stabilityPre = 100 - riskScore100;
+    riskScore100 = Math.round(riskScore0to10*10); // 0–100 risk
 
     const usage=document.getElementById("usageLevelPortfolio").value;
     const impactPct=usageImpactPct(usage);
-    impactScore = Math.round(stabilityPre * impactPct);
-    finalScore = Math.min(100, stabilityPre + impactScore);
 
+    impactScore    = Math.round(riskScore100 * impactPct);   // risk points removed per building
+    finalRiskScore = Math.max(0, riskScore100 - impactScore);
+
+    // Estimate N as average across questions that were filled
     usedN = qCount>0 ? Math.round(totalNsum/qCount) : 1;
 
-    const perLow = Math.round(riskScore100*3000/1000)*1000;
-    const perHigh = Math.round(riskScore100*6000/1000)*1000;
+    // Econ ranges per building, then scale by N
+    const perLow     = Math.round(riskScore100*3000/1000)*1000;
+    const perHigh    = Math.round(riskScore100*6000/1000)*1000;
     const perStabLow = Math.round(impactScore*3000/1000)*1000;
-    const perStabHigh = Math.round(impactScore*6000/1000)*1000;
+    const perStabHigh= Math.round(impactScore*6000/1000)*1000;
 
-    baselineLow = perLow * usedN;
-    baselineHigh = perHigh * usedN;
+    baselineLow   = perLow * usedN;
+    baselineHigh  = perHigh * usedN;
     stabilizedLow = perStabLow * usedN;
-    stabilizedHigh = perStabHigh * usedN;
+    stabilizedHigh= perStabHigh * usedN;
 
     netImpact = (stabilizedLow + stabilizedHigh)/2;
     hasRates=false;
   }
 
+  // Convert risk-based scores into stability (HIGH = good)
+  stabilityPre = Math.max(0, Math.min(100, 100 - riskScore100));
+  finalScore   = Math.max(0, Math.min(100, 100 - finalRiskScore));
+
   // Render results
-  document.getElementById("riskScoreLabel").textContent = `${stabilityPre} / 100`;
+  document.getElementById("riskScoreLabel").textContent   = `${stabilityPre} / 100`;
   document.getElementById("impactScoreLabel").textContent = `${impactScore} pts`;
-  document.getElementById("finalScoreLabel").textContent = `${finalScore} / 100`;
+  document.getElementById("finalScoreLabel").textContent  = `${finalScore} / 100`;
 
   const b=classify(stabilityPre);
   const badge=document.getElementById("riskBadge");
@@ -801,7 +809,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   if(mode==="single"){
     if(hasRates){
       const directLabel = directAnnual >= 0 ? "Estimated direct annual savings from rate:" : "Estimated direct annual premium from rate:";
-      const netLabel = netImpact >= 0 ? "Directional annual net benefit (rate + stability):" : "Directional annual net cost (rate + stability):";
+      const netLabel    = netImpact   >= 0 ? "Directional annual net benefit (rate + stability):" : "Directional annual net cost (rate + stability):";
       extra = `<div class="small" style="margin-top:8px;">
 <b>${directLabel}</b> $${Math.abs(directAnnual).toLocaleString()}<br/>
 <b>${netLabel}</b> $${Math.abs(netImpact).toLocaleString()}<br/>
@@ -845,7 +853,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
       const compareRate=parseFloat(document.getElementById("compareRate").value);
       const staffRate=parseFloat(document.getElementById("staffRate").value);
       const premium = staffRate > compareRate + 1;
-      const parity = Math.abs(staffRate-compareRate) <= 1;
+      const parity  = Math.abs(staffRate-compareRate) <= 1;
       const cheaper = staffRate < compareRate - 1;
 
       if(cheaper && netImpact>=0){
@@ -935,3 +943,4 @@ updateRowSums();
 </script>
 </body>
 </html>
+
