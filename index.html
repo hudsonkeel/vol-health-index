@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -160,13 +160,14 @@ Choose the option that best fits today. If you’re not sure, select <b>Unknown 
 </select>
 </div>
 
+<!-- Q5 is now PBJ -->
 <div>
-<label for="q5">Reimbursement &amp; documentation (for SNF/PDPM beds)</label>
+<label for="q5">PBJ accuracy &amp; Five-Star staffing confidence</label>
 <select id="q5">
-<option value="low">Documentation strong; denials are rare</option>
-<option value="med">Occasional denials or missed skilled minutes</option>
-<option value="high">Frequent corrections, denials, or missed minutes</option>
-<option value="unk">Unknown / Not sure / Not applicable</option>
+<option value="low">PBJ clean; confident in staffing data</option>
+<option value="med">Some corrections or PBJ-related anxiety</option>
+<option value="high">Frequent corrections, dips, or staffing-star concerns</option>
+<option value="unk">Unknown / Not sure</option>
 </select>
 </div>
 
@@ -210,14 +211,19 @@ Choose the option that best fits today. If you’re not sure, select <b>Unknown 
 </select>
 </div>
 
+<!-- Q10 is now PDPM + clarifier -->
 <div>
-<label for="q10">PBJ accuracy &amp; Five-Star staffing confidence</label>
+<label for="q10">Reimbursement &amp; documentation (for SNF/PDPM beds)</label>
 <select id="q10">
-<option value="low">PBJ clean; confident in staffing data</option>
-<option value="med">Some corrections or PBJ-related anxiety</option>
-<option value="high">Frequent corrections, dips, or staffing-star concerns</option>
-<option value="unk">Unknown / Not sure</option>
+<option value="low">Documentation strong; denials are rare</option>
+<option value="med">Occasional denials or missed skilled minutes</option>
+<option value="high">Frequent corrections, denials, or missed minutes</option>
+<option value="unk">Unknown / Not sure / Not applicable</option>
 </select>
+<div class="hint">
+This PDPM / reimbursement layer primarily applies to SNF / Rehab / Mixed campuses. For AL/MC-only buildings,
+the model automatically dials down its impact under the hood.
+</div>
 </div>
 </div>
 
@@ -282,7 +288,6 @@ For each question, enter how many communities in your portfolio match each optio
 </div>
 
 <!-- Question blocks (portfolio) -->
-<!-- q1–q10 blocks unchanged from your earlier version -->
 <div class="pill" data-q="q1">
 <h3>1) Census stability &amp; move-in / move-out patterns</h3>
 <div class="opt-row">
@@ -367,22 +372,23 @@ For each question, enter how many communities in your portfolio match each optio
 <div class="totals-line" id="sum_q4"></div>
 </div>
 
+<!-- Q5 is now PBJ in portfolio -->
 <div class="pill" data-q="q5" style="margin-top:12px;">
-<h3>5) Reimbursement &amp; documentation (for SNF/PDPM beds)</h3>
+<h3>5) PBJ accuracy &amp; Five-Star staffing confidence</h3>
 <div class="opt-row">
-<div class="opt-label">Documentation strong; denials are rare</div>
+<div class="opt-label">PBJ clean; confident in staffing data</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_low"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Occasional denials or missed skilled minutes</div>
+<div class="opt-label">Some corrections or PBJ-related anxiety</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_med"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Frequent corrections, denials, or missed minutes</div>
+<div class="opt-label">Frequent corrections, dips, or staffing-star concerns</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_high"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Unknown / Not sure / Not applicable</div>
+<div class="opt-label">Unknown / Not sure</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_unk"></div>
 </div>
 <div class="totals-line" id="sum_q5"></div>
@@ -472,22 +478,23 @@ For each question, enter how many communities in your portfolio match each optio
 <div class="totals-line" id="sum_q9"></div>
 </div>
 
+<!-- Q10 is now PDPM in portfolio -->
 <div class="pill" data-q="q10" style="margin-top:12px;">
-<h3>10) PBJ accuracy &amp; Five-Star staffing confidence</h3>
+<h3>10) Reimbursement &amp; documentation (for SNF/PDPM beds)</h3>
 <div class="opt-row">
-<div class="opt-label">PBJ clean; confident in staffing data</div>
+<div class="opt-label">Documentation strong; denials are rare</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_low"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Some corrections or PBJ-related anxiety</div>
+<div class="opt-label">Occasional denials or missed skilled minutes</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_med"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Frequent corrections, dips, or staffing-star concerns</div>
+<div class="opt-label">Frequent corrections, denials, or missed minutes</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_high"></div>
 </div>
 <div class="opt-row">
-<div class="opt-label">Unknown / Not sure</div>
+<div class="opt-label">Unknown / Not sure / Not applicable</div>
 <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_unk"></div>
 </div>
 <div class="totals-line" id="sum_q10"></div>
@@ -680,7 +687,8 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   const state=document.getElementById("state").value || "N/A";
 
   let weights={...WEIGHTS};
-  if(communityType==="al_mc") weights.q5 = 0;
+  // AL/MC: PDPM layer (now q10) is not relevant, so we zero its weight
+  if(communityType==="al_mc") weights.q10 = 0;
 
   let riskScore100=0, finalRiskScore=0;
   let stabilityPre=0, impactScore=0, finalScore=0;
@@ -708,7 +716,7 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
     const usage=document.getElementById("usageLevel").value;
     const impactPct=usageImpactPct(usage);
 
-    // ❗ Impact is based on RISK, not stability.
+    // Impact is based on RISK, not stability.
     impactScore = Math.round(riskScore100 * impactPct);   // risk points removed = stability points gained
     finalRiskScore = Math.max(0, riskScore100 - impactScore);
 
@@ -947,8 +955,3 @@ updateRowSums();
 </script>
 </body>
 </html>
-
-
-
-
-
