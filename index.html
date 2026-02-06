@@ -9,27 +9,49 @@
   --brand-blue:#1f57b8;        /* StaffHealth blue */
   --brand-green:#2e8b57;       /* Accushield Verified green */
   --brand-yellow:#f2b705;
-  --dark:#050814;
-  --bg:#050816;
-  --card:#0d1224;
-  --border:#242944;
-  --muted:#9ca3c7;
+
+  /* Page chrome (match landing feel) */
+  --outer-bg-1:#5b6270;
+  --outer-bg-2:#3a3f48;
+  --outer-bg-3:#2a2e35;
+  --inner-bg-1:#191e2b;
+  --inner-bg-2:#0b0f19;
+  --inner-bg-3:#050814;
+
+  /* Cards + text */
+  --card:#141b2c;
+  --border:#262f46;
+  --muted:#a6aec9;
   --danger:#df4759;
 }
 *{
   box-sizing:border-box;
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 }
+
+/* Outer page background (matches landing page shell) */
 body{
   margin:0;
-  background:radial-gradient(circle at top,#101735 0,#050816 55%,#02030a 100%);
+  min-height:100vh;
+  padding:24px 12px 32px;
+  background:radial-gradient(circle at top,var(--outer-bg-1) 0,var(--outer-bg-2) 45%,var(--outer-bg-3) 100%);
   color:#f5f6ff;
+}
+
+/* Inner “card” shell like the landing page */
+.shell{
+  max-width:1160px;
+  margin:0 auto;
+  padding:24px 24px 36px;
+  border-radius:28px;
+  background:radial-gradient(circle at top,var(--inner-bg-1) 0,var(--inner-bg-2) 55%,var(--inner-bg-3) 100%);
+  box-shadow:0 22px 60px rgba(0,0,0,0.78);
 }
 
 /* Header + hero strip */
 header{
   text-align:center;
-  padding:26px 15px 18px;
+  padding:6px 15px 12px;
 }
 header h1{
   margin:0;
@@ -56,19 +78,19 @@ header p{
   text-transform:uppercase;
   letter-spacing:0.8px;
   font-size:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.5);
-  max-width:1100px;      /* match cards */
-  margin:0 auto 10px;    /* center and add gap above cards */
-  border-radius:999px;   /* pill look */
+  box-shadow:0 8px 20px rgba(0,0,0,0.55);
+  max-width:1100px;
+  margin:4px auto 12px;
+  border-radius:999px;
 }
 
-.container{max-width:1100px;margin:20px auto 40px;padding:0 15px}
+.container{max-width:1100px;margin:20px auto 0;padding:0 15px}
 .card{
   background:var(--card);
-  border-radius:14px;
+  border-radius:16px;
   padding:18px 18px 16px;
   margin-bottom:16px;
-  box-shadow:0 10px 28px rgba(0,0,0,0.45);
+  box-shadow:0 14px 32px rgba(0,0,0,0.55);
   border:1px solid var(--border);
 }
 .card h2{margin:0 0 10px;font-size:18px;}
@@ -178,10 +200,10 @@ textarea::placeholder{color:#5e648b;}
 
 /* Results */
 .results-banner{
-  background:linear-gradient(135deg,#050814,#141c3b);
+  background:linear-gradient(135deg,#050814,#171f3a);
   color:#fff;
   padding:16px;
-  border-radius:14px;
+  border-radius:16px;
   text-align:center;
   border:1px solid #2a335b;
 }
@@ -245,523 +267,534 @@ footer{
   color:#8b92b6;
   padding:20px 10px 0;
 }
+
+/* Small footnote under shell */
+.footnote{
+  text-align:center;
+  font-size:11px;
+  color:#777;
+  margin-top:8px;
+  opacity:0.78;
+}
 </style>
 </head>
 
 <body>
-<header>
-  <h1><span>VOL Health™</span> Volatility Index</h1>
-  <p>
-    StaffHealth + Accushield Verified = VOL Health™. Directional diagnostic that scores the
-    Trinity of Volatility, Operations &amp; Labor across 10 drivers — census, OT, PBJ,
-    survey exposure, reimbursement, reputation, and leadership bandwidth. Designed for a
-    single building or an entire portfolio.
-  </p>
-</header>
-
-<div class="hero-strip">
-  StaffHealth + Accushield Verified = VOL Health™ — The Trinity of Volatility, Operations &amp; Labor
-</div>
-
-<div class="container">
-
-  <div class="card">
-    <h2>1. Select Mode</h2>
-    <div class="mode-toggle">
-      <label><input type="radio" name="mode" value="single" checked> Single Community Mode (ED / building-level)</label>
-      <label><input type="radio" name="mode" value="portfolio"> Portfolio Mode (VP Ops / portfolio roll-up)</label>
-    </div>
-    <div class="hint" style="margin-top:8px;">
-      Portfolio Mode lets executives estimate how many communities sit in each answer option for each question — 
-      no need to run 20 buildings one-by-one.
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>2. Snapshot</h2>
-    <div class="grid grid-2">
-      <div>
-        <label for="communityType">Primary Care Level (dominant)</label>
-        <select id="communityType">
-          <option value="al_mc" selected>Assisted Living / Memory Care</option>
-          <option value="snf">Skilled Nursing / Rehab (PDPM)</option>
-          <option value="mixed">Mixed Campus (AL/MC + SNF)</option>
-        </select>
-        <div class="hint">Used to tailor PDPM / reimbursement relevance.</div>
-      </div>
-      <div>
-        <label for="state">State / Region (optional)</label>
-        <input id="state" type="text" placeholder="TX, GA, FL, etc." />
-        <div class="hint">Optional context for follow-up discussion.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SINGLE MODE -->
-  <div class="card" id="singleSection">
-    <h2>3. Single Community Risk Profile</h2>
-    <p class="small" style="margin-bottom:12px;">
-      Choose the option that best fits today. If you’re not sure, select <b>Unknown / Not sure</b> — 
-      lack of visibility is itself a risk.
+<div class="shell">
+  <header>
+    <h1><span>VOL Health™</span> Volatility Index</h1>
+    <p>
+      StaffHealth + Accushield Verified = VOL Health™. Directional diagnostic that scores the
+      Trinity of Volatility, Operations &amp; Labor across 10 drivers — census, OT, PBJ,
+      survey exposure, reimbursement, reputation, and leadership bandwidth. Designed for a
+      single building or an entire portfolio.
     </p>
+  </header>
 
-    <div class="grid grid-2">
-      <div>
-        <label for="q1">Census stability &amp; move-in / move-out patterns</label>
-        <select id="q1">
-          <option value="low">Generally stable, rarely delayed</option>
-          <option value="med">Some seasonal swings or occasional delays</option>
-          <option value="high">Frequent delays, hard to keep census steady</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
+  <div class="hero-strip">
+    StaffHealth + Accushield Verified = VOL Health™ — The Trinity of Volatility, Operations &amp; Labor
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>1. Select Mode</h2>
+      <div class="mode-toggle">
+        <label><input type="radio" name="mode" value="single" checked> Single Community Mode (ED / building-level)</label>
+        <label><input type="radio" name="mode" value="portfolio"> Portfolio Mode (VP Ops / portfolio roll-up)</label>
       </div>
-
-      <div>
-        <label for="q2">Acuity shifts &amp; ability to flex staffing</label>
-        <select id="q2">
-          <option value="low">Acuity fairly stable, model flexes well</option>
-          <option value="med">Occasional spikes strain the team</option>
-          <option value="high">Frequent acuity spikes; team constantly stretched</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="q3">Labor model &amp; overtime / call-out pressure</label>
-        <select id="q3">
-          <option value="low">Low (0–20 OT hours/month; call-outs manageable)</option>
-          <option value="med">Moderate (20–60 OT hours/month or frequent scrambling)</option>
-          <option value="high">High (60+ OT hours/month; daily scrambling / heavy OT)</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-        <div class="hint">Overtime ranges are monthly, across roles.</div>
-      </div>
-
-      <div>
-        <label for="q4">Survey / regulatory comfort level</label>
-        <select id="q4">
-          <option value="low">Clean recent history, few staffing concerns</option>
-          <option value="med">Some tags or close calls tied to staffing</option>
-          <option value="high">Significant survey risk or recent citations</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <!-- Q5 is now PBJ -->
-      <div>
-        <label for="q5">PBJ accuracy &amp; Five-Star staffing confidence</label>
-        <select id="q5">
-          <option value="low">PBJ clean; confident in staffing data</option>
-          <option value="med">Some corrections or PBJ-related anxiety</option>
-          <option value="high">Frequent corrections, dips, or staffing-star concerns</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="q6">Liability exposure (falls, med errors, incidents)</label>
-        <select id="q6">
-          <option value="low">Incidents infrequent and well managed</option>
-          <option value="med">Moderate incident volume with some staffing link</option>
-          <option value="high">High incident volume or recent severe events</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="q7">Reputation &amp; referral velocity</label>
-        <select id="q7">
-          <option value="low">Strong reviews and referral relationships</option>
-          <option value="med">Mixed reviews or stalled referrals</option>
-          <option value="high">Negative staffing-related reviews or referral pullback</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="q8">Leadership bandwidth (ED/DON time spent on staffing)</label>
-        <select id="q8">
-          <option value="low">Staffing rarely hijacks leadership time</option>
-          <option value="med">Staffing issues consume weekly time blocks</option>
-          <option value="high">Leaders feel constantly pulled into staffing fires</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="q9">Corporate standardization (partners &amp; credentialing)</label>
-        <select id="q9">
-          <option value="low">Single, well-aligned partner &amp; clear process</option>
-          <option value="med">Several partners with some variation</option>
-          <option value="high">Many partners; processes and quality vary widely</option>
-          <option value="unk">Unknown / Not sure</option>
-        </select>
-      </div>
-
-      <!-- Q10 is now PDPM + clarifier -->
-      <div>
-        <label for="q10">Reimbursement &amp; documentation (for SNF/PDPM beds)</label>
-        <select id="q10">
-          <option value="low">Documentation strong; denials are rare</option>
-          <option value="med">Occasional denials or missed skilled minutes</option>
-          <option value="high">Frequent corrections, denials, or missed minutes</option>
-          <option value="unk">Unknown / Not sure / Not applicable</option>
-        </select>
-        <div class="hint">
-          This PDPM / reimbursement layer primarily applies to SNF / Rehab / Mixed campuses. For AL/MC-only buildings,
-          the model automatically dials down its impact under the hood.
-        </div>
+      <div class="hint" style="margin-top:8px;">
+        Portfolio Mode lets executives estimate how many communities sit in each answer option for each question — 
+        no need to run 20 buildings one-by-one.
       </div>
     </div>
 
-    <div style="margin-top:16px;">
-      <label for="usageLevel">If you used StaffHealth as an elasticity layer, how broadly would you expect to use us?</label>
-      <select id="usageLevel" style="max-width:380px;">
-        <option value="conservative">Conservative (weekends, true pain points only)</option>
-        <option value="moderate" selected>Moderate (weekends + select dayparts)</option>
-        <option value="aggressive">Strategic (full elasticity model across the building)</option>
-      </select>
-      <div class="hint">This adjusts the projected stability gain (risk reduction).</div>
-    </div>
-
-    <div style="margin-top:18px;">
-      <h3 style="margin:0 0 8px;font-size:15px;">Rate &amp; Shifts Snapshot (Optional)</h3>
-      <p class="small">
-        Add a simple comparison rate and estimated <b>StaffHealth shifts per month</b> if you want the tool to incorporate direct
-        rate economics. We’ll convert shifts × 8 hours behind the scenes. Leave blank to run a pure volatility/risk view.
-      </p>
+    <div class="card">
+      <h2>2. Snapshot</h2>
       <div class="grid grid-2">
         <div>
-          <label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
-          <input id="compareRate" type="number" step="0.01" placeholder="e.g., 28.00" />
+          <label for="communityType">Primary Care Level (dominant)</label>
+          <select id="communityType">
+            <option value="al_mc" selected>Assisted Living / Memory Care</option>
+            <option value="snf">Skilled Nursing / Rehab (PDPM)</option>
+            <option value="mixed">Mixed Campus (AL/MC + SNF)</option>
+          </select>
+          <div class="hint">Used to tailor PDPM / reimbursement relevance.</div>
         </div>
         <div>
-          <label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
-          <input id="staffRate" type="number" step="0.01" placeholder="e.g., 27.00" />
-        </div>
-        <div>
-          <label for="shiftsMonth"
-                 title="For this prototype, 1 shift = 8 hours (typical AL/MC staffing pattern).">
-            Estimated shifts per month through StaffHealth (8 hrs = standard shift)
-          </label>
-          <input id="shiftsMonth" type="number" step="1" placeholder="e.g., 12 (weekends + pain shifts)" />
+          <label for="state">State / Region (optional)</label>
+          <input id="state" type="text" placeholder="TX, GA, FL, etc." />
+          <div class="hint">Optional context for follow-up discussion.</div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- PORTFOLIO MODE -->
-  <div class="card" id="portfolioSection" style="display:none;">
-    <h2>3. Portfolio Risk Profile (All Communities)</h2>
-    <p class="small" style="margin-bottom:10px;">
-      For each question, enter how many communities in your portfolio match each option. This creates a portfolio-level view without running the tool community-by-community.
-    </p>
+    <!-- SINGLE MODE -->
+    <div class="card" id="singleSection">
+      <h2>3. Single Community Risk Profile</h2>
+      <p class="small" style="margin-bottom:12px;">
+        Choose the option that best fits today. If you’re not sure, select <b>Unknown / Not sure</b> — 
+        lack of visibility is itself a risk.
+      </p>
 
-    <div class="grid grid-2" style="margin-bottom:10px;">
-      <div>
-        <label for="portfolioN">Portfolio size (optional)</label>
-        <input id="portfolioN" type="number" min="0" placeholder="e.g., 18" />
-        <div class="hint">If provided, we’ll flag questions where your counts don’t sum to N (sanity check only).</div>
+      <div class="grid grid-2">
+        <div>
+          <label for="q1">Census stability &amp; move-in / move-out patterns</label>
+          <select id="q1">
+            <option value="low">Generally stable, rarely delayed</option>
+            <option value="med">Some seasonal swings or occasional delays</option>
+            <option value="high">Frequent delays, hard to keep census steady</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q2">Acuity shifts &amp; ability to flex staffing</label>
+          <select id="q2">
+            <option value="low">Acuity fairly stable, model flexes well</option>
+            <option value="med">Occasional spikes strain the team</option>
+            <option value="high">Frequent acuity spikes; team constantly stretched</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q3">Labor model &amp; overtime / call-out pressure</label>
+          <select id="q3">
+            <option value="low">Low (0–20 OT hours/month; call-outs manageable)</option>
+            <option value="med">Moderate (20–60 OT hours/month or frequent scrambling)</option>
+            <option value="high">High (60+ OT hours/month; daily scrambling / heavy OT)</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+          <div class="hint">Overtime ranges are monthly, across roles.</div>
+        </div>
+
+        <div>
+          <label for="q4">Survey / regulatory comfort level</label>
+          <select id="q4">
+            <option value="low">Clean recent history, few staffing concerns</option>
+            <option value="med">Some tags or close calls tied to staffing</option>
+            <option value="high">Significant survey risk or recent citations</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <!-- Q5 is now PBJ -->
+        <div>
+          <label for="q5">PBJ accuracy &amp; Five-Star staffing confidence</label>
+          <select id="q5">
+            <option value="low">PBJ clean; confident in staffing data</option>
+            <option value="med">Some corrections or PBJ-related anxiety</option>
+            <option value="high">Frequent corrections, dips, or staffing-star concerns</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q6">Liability exposure (falls, med errors, incidents)</label>
+          <select id="q6">
+            <option value="low">Incidents infrequent and well managed</option>
+            <option value="med">Moderate incident volume with some staffing link</option>
+            <option value="high">High incident volume or recent severe events</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q7">Reputation &amp; referral velocity</label>
+          <select id="q7">
+            <option value="low">Strong reviews and referral relationships</option>
+            <option value="med">Mixed reviews or stalled referrals</option>
+            <option value="high">Negative staffing-related reviews or referral pullback</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q8">Leadership bandwidth (ED/DON time spent on staffing)</label>
+          <select id="q8">
+            <option value="low">Staffing rarely hijacks leadership time</option>
+            <option value="med">Staffing issues consume weekly time blocks</option>
+            <option value="high">Leaders feel constantly pulled into staffing fires</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="q9">Corporate standardization (partners &amp; credentialing)</label>
+          <select id="q9">
+            <option value="low">Single, well-aligned partner &amp; clear process</option>
+            <option value="med">Several partners with some variation</option>
+            <option value="high">Many partners; processes and quality vary widely</option>
+            <option value="unk">Unknown / Not sure</option>
+          </select>
+        </div>
+
+        <!-- Q10 is now PDPM + clarifier -->
+        <div>
+          <label for="q10">Reimbursement &amp; documentation (for SNF/PDPM beds)</label>
+          <select id="q10">
+            <option value="low">Documentation strong; denials are rare</option>
+            <option value="med">Occasional denials or missed skilled minutes</option>
+            <option value="high">Frequent corrections, denials, or missed minutes</option>
+            <option value="unk">Unknown / Not sure / Not applicable</option>
+          </select>
+          <div class="hint">
+            This PDPM / reimbursement layer primarily applies to SNF / Rehab / Mixed campuses. For AL/MC-only buildings,
+            the model automatically dials down its impact under the hood.
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="usageLevelPortfolio">Elasticity adoption level (portfolio)</label>
-        <select id="usageLevelPortfolio">
-          <option value="conservative">Conservative (weekends / true pain points)</option>
+
+      <div style="margin-top:16px;">
+        <label for="usageLevel">If you used StaffHealth as an elasticity layer, how broadly would you expect to use us?</label>
+        <select id="usageLevel" style="max-width:380px;">
+          <option value="conservative">Conservative (weekends, true pain points only)</option>
           <option value="moderate" selected>Moderate (weekends + select dayparts)</option>
-          <option value="aggressive">Strategic (broad portfolio elasticity)</option>
+          <option value="aggressive">Strategic (full elasticity model across the building)</option>
         </select>
-        <div class="hint">Adjusts projected risk reduction across the portfolio.</div>
+        <div class="hint">This adjusts the projected stability gain (risk reduction).</div>
       </div>
-    </div>
 
-    <!-- Question blocks (portfolio) -->
-    <div class="pill" data-q="q1">
-      <h3>1) Census stability &amp; move-in / move-out patterns</h3>
-      <div class="opt-row">
-        <div class="opt-label">Generally stable, rarely delayed</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Some seasonal swings or occasional delays</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Frequent delays, hard to keep census steady</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q1"></div>
-    </div>
-
-    <div class="pill" data-q="q2" style="margin-top:12px;">
-      <h3>2) Acuity shifts &amp; ability to flex staffing</h3>
-      <div class="opt-row">
-        <div class="opt-label">Acuity fairly stable, model flexes well</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Occasional spikes strain the team</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Frequent acuity spikes; team constantly stretched</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q2"></div>
-    </div>
-
-    <div class="pill" data-q="q3" style="margin-top:12px;">
-      <h3>3) Labor model &amp; overtime / call-out pressure</h3>
-      <div class="opt-row">
-        <div class="opt-label">Low (0–20 OT hours/month; call-outs manageable)</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Moderate (20–60 OT hours/month or frequent scrambling)</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">High (60+ OT hours/month; daily scrambling / heavy OT)</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q3"></div>
-    </div>
-
-    <div class="pill" data-q="q4" style="margin-top:12px;">
-      <h3>4) Survey / regulatory comfort level</h3>
-      <div class="opt-row">
-        <div class="opt-label">Clean recent history, few staffing concerns</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Some tags or close calls tied to staffing</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Significant survey risk or recent citations</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q4"></div>
-    </div>
-
-    <!-- Q5 is now PBJ in portfolio -->
-    <div class="pill" data-q="q5" style="margin-top:12px;">
-      <h3>5) PBJ accuracy &amp; Five-Star staffing confidence</h3>
-      <div class="opt-row">
-        <div class="opt-label">PBJ clean; confident in staffing data</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Some corrections or PBJ-related anxiety</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Frequent corrections, dips, or staffing-star concerns</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q5"></div>
-    </div>
-
-    <div class="pill" data-q="q6" style="margin-top:12px;">
-      <h3>6) Liability exposure (falls, med errors, incidents)</h3>
-      <div class="opt-row">
-        <div class="opt-label">Incidents infrequent and well managed</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Moderate incident volume with some staffing link</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">High incident volume or recent severe events</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q6"></div>
-    </div>
-
-    <div class="pill" data-q="q7" style="margin-top:12px;">
-      <h3>7) Reputation &amp; referral velocity</h3>
-      <div class="opt-row">
-        <div class="opt-label">Strong reviews and referral relationships</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Mixed reviews or stalled referrals</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Negative staffing-related reviews or referral pullback</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q7"></div>
-    </div>
-
-    <div class="pill" data-q="q8" style="margin-top:12px;">
-      <h3>8) Leadership bandwidth (ED/DON time spent on staffing)</h3>
-      <div class="opt-row">
-        <div class="opt-label">Staffing rarely hijacks leadership time</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Staffing issues consume weekly time blocks</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Leaders feel constantly pulled into staffing fires</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q8"></div>
-    </div>
-
-    <div class="pill" data-q="q9" style="margin-top:12px;">
-      <h3>9) Corporate standardization (partners &amp; credentialing)</h3>
-      <div class="opt-row">
-        <div class="opt-label">Single, well-aligned partner &amp; clear process</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Several partners with some variation</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Many partners; processes and quality vary widely</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q9"></div>
-    </div>
-
-    <!-- Q10 is now PDPM in portfolio -->
-    <div class="pill" data-q="q10" style="margin-top:12px;">
-      <h3>10) Reimbursement &amp; documentation (for SNF/PDPM beds)</h3>
-      <div class="opt-row">
-        <div class="opt-label">Documentation strong; denials are rare</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_low"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Occasional denials or missed skilled minutes</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_med"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Frequent corrections, denials, or missed minutes</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_high"></div>
-      </div>
-      <div class="opt-row">
-        <div class="opt-label">Unknown / Not sure / Not applicable</div>
-        <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_unk"></div>
-      </div>
-      <div class="totals-line" id="sum_q10"></div>
-    </div>
-
-  </div>
-
-  <div class="card">
-    <h2>4. Run the VOL Health Index</h2>
-    <p class="small">
-      Click Calculate to see your VOL Health stability score, projected stability gain, and illustrative annual economics.
-    </p>
-    <button class="btn" id="calcBtn">Calculate VOL Health Score</button>
-    <button class="btn secondary" id="resetBtn" type="button">Reset</button>
-  </div>
-
-  <div class="card" id="resultsCard" style="display:none;">
-    <div class="results-banner">
-      <h3>Your VOL Health Snapshot</h3>
-      <div class="results-row">
-        <div class="result-pill">
-          <div class="result-label" id="riskLabel">Baseline VOL Health Stability (Current State)</div>
-          <div class="result-value" id="riskScoreLabel">0 / 100</div>
-          <div id="riskBadge" class="badge"></div>
-
-          <div class="small" style="color:#bfbfbf; margin-top:4px;">
-            Higher is better — directional stability signal across Volatility, Operations &amp; Labor.
+      <div style="margin-top:18px;">
+        <h3 style="margin:0 0 8px;font-size:15px;">Rate &amp; Shifts Snapshot (Optional)</h3>
+        <p class="small">
+          Add a simple comparison rate and estimated <b>StaffHealth shifts per month</b> if you want the tool to incorporate direct
+          rate economics. We’ll convert shifts × 8 hours behind the scenes. Leave blank to run a pure volatility/risk view.
+        </p>
+        <div class="grid grid-2">
+          <div>
+            <label for="compareRate">Comparison hourly / blended rate ($/hr)</label>
+            <input id="compareRate" type="number" step="0.01" placeholder="e.g., 28.00" />
           </div>
-        </div>
-        <div class="result-pill">
-          <div class="result-label">Projected Stability Gain (Elasticity Impact)</div>
-          <div class="result-value" id="impactScoreLabel">0 pts</div>
-          <div class="small" style="color:#bfbfbf;">
-            How many stability points a VOL Health model powered by StaffHealth + Accushield Verified could realistically add.
+          <div>
+            <label for="staffRate">StaffHealth proposed hourly / blended rate ($/hr)</label>
+            <input id="staffRate" type="number" step="0.01" placeholder="e.g., 27.00" />
           </div>
-        </div>
-        <div class="result-pill">
-          <div class="result-label">Stabilized VOL Health Score (Post-Elasticity)</div>
-          <div class="result-value" id="finalScoreLabel">0 / 100</div>
-          <div class="small" style="color:#bfbfbf;">
-            Higher is better — post-elasticity stability profile.
+          <div>
+            <label for="shiftsMonth"
+                   title="For this prototype, 1 shift = 8 hours (typical AL/MC staffing pattern).">
+              Estimated shifts per month through StaffHealth (8 hrs = standard shift)
+            </label>
+            <input id="shiftsMonth" type="number" step="1" placeholder="e.g., 12 (weekends + pain shifts)" />
           </div>
         </div>
       </div>
     </div>
 
-    <p class="small" id="modeSummary" style="margin-top:12px;">
-      In Single Community Mode, the VOL Health Volatility Index reflects one building’s volatility, overtime, PBJ exposure,
-      and leadership strain. It is directional, not a survey or audit.
-    </p>
+    <!-- PORTFOLIO MODE -->
+    <div class="card" id="portfolioSection" style="display:none;">
+      <h2>3. Portfolio Risk Profile (All Communities)</h2>
+      <p class="small" style="margin-bottom:10px;">
+        For each question, enter how many communities in your portfolio match each option. This creates a portfolio-level view without running the tool community-by-community.
+      </p>
 
-    <div class="grid grid-2" style="margin-top:12px;">
-      <div>
-        <div class="pill-header">Estimated Annual Economics at Stake (Illustrative)</div>
-        <div id="valueSummary">—</div>
+      <div class="grid grid-2" style="margin-bottom:10px;">
+        <div>
+          <label for="portfolioN">Portfolio size (optional)</label>
+          <input id="portfolioN" type="number" min="0" placeholder="e.g., 18" />
+          <div class="hint">If provided, we’ll flag questions where your counts don’t sum to N (sanity check only).</div>
+        </div>
+        <div>
+          <label for="usageLevelPortfolio">Elasticity adoption level (portfolio)</label>
+          <select id="usageLevelPortfolio">
+            <option value="conservative">Conservative (weekends / true pain points)</option>
+            <option value="moderate" selected>Moderate (weekends + select dayparts)</option>
+            <option value="aggressive">Strategic (broad portfolio elasticity)</option>
+          </select>
+          <div class="hint">Adjusts projected risk reduction across the portfolio.</div>
+        </div>
       </div>
-      <div>
-        <div class="pill-header">Quick Read on Staffing Health</div>
-        <div id="profileSummary" class="small" style="font-size:13px;">—</div>
+
+      <!-- Question blocks (portfolio) -->
+      <div class="pill" data-q="q1">
+        <h3>1) Census stability &amp; move-in / move-out patterns</h3>
+        <div class="opt-row">
+          <div class="opt-label">Generally stable, rarely delayed</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Some seasonal swings or occasional delays</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Frequent delays, hard to keep census steady</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q1_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q1"></div>
+      </div>
+
+      <div class="pill" data-q="q2" style="margin-top:12px;">
+        <h3>2) Acuity shifts &amp; ability to flex staffing</h3>
+        <div class="opt-row">
+          <div class="opt-label">Acuity fairly stable, model flexes well</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Occasional spikes strain the team</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Frequent acuity spikes; team constantly stretched</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q2_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q2"></div>
+      </div>
+
+      <div class="pill" data-q="q3" style="margin-top:12px;">
+        <h3>3) Labor model &amp; overtime / call-out pressure</h3>
+        <div class="opt-row">
+          <div class="opt-label">Low (0–20 OT hours/month; call-outs manageable)</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Moderate (20–60 OT hours/month or frequent scrambling)</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">High (60+ OT hours/month; daily scrambling / heavy OT)</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q3_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q3"></div>
+      </div>
+
+      <div class="pill" data-q="q4" style="margin-top:12px;">
+        <h3>4) Survey / regulatory comfort level</h3>
+        <div class="opt-row">
+          <div class="opt-label">Clean recent history, few staffing concerns</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Some tags or close calls tied to staffing</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Significant survey risk or recent citations</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q4_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q4"></div>
+      </div>
+
+      <!-- Q5 is now PBJ in portfolio -->
+      <div class="pill" data-q="q5" style="margin-top:12px;">
+        <h3>5) PBJ accuracy &amp; Five-Star staffing confidence</h3>
+        <div class="opt-row">
+          <div class="opt-label">PBJ clean; confident in staffing data</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Some corrections or PBJ-related anxiety</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Frequent corrections, dips, or staffing-star concerns</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q5_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q5"></div>
+      </div>
+
+      <div class="pill" data-q="q6" style="margin-top:12px;">
+        <h3>6) Liability exposure (falls, med errors, incidents)</h3>
+        <div class="opt-row">
+          <div class="opt-label">Incidents infrequent and well managed</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Moderate incident volume with some staffing link</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">High incident volume or recent severe events</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q6_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q6"></div>
+      </div>
+
+      <div class="pill" data-q="q7" style="margin-top:12px;">
+        <h3>7) Reputation &amp; referral velocity</h3>
+        <div class="opt-row">
+          <div class="opt-label">Strong reviews and referral relationships</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Mixed reviews or stalled referrals</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Negative staffing-related reviews or referral pullback</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q7_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q7"></div>
+      </div>
+
+      <div class="pill" data-q="q8" style="margin-top:12px;">
+        <h3>8) Leadership bandwidth (ED/DON time spent on staffing)</h3>
+        <div class="opt-row">
+          <div class="opt-label">Staffing rarely hijacks leadership time</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Staffing issues consume weekly time blocks</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Leaders feel constantly pulled into staffing fires</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q8_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q8"></div>
+      </div>
+
+      <div class="pill" data-q="q9" style="margin-top:12px;">
+        <h3>9) Corporate standardization (partners &amp; credentialing)</h3>
+        <div class="opt-row">
+          <div class="opt-label">Single, well-aligned partner &amp; clear process</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Several partners with some variation</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Many partners; processes and quality vary widely</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q9_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q9"></div>
+      </div>
+
+      <!-- Q10 is now PDPM in portfolio -->
+      <div class="pill" data-q="q10" style="margin-top:12px;">
+        <h3>10) Reimbursement &amp; documentation (for SNF/PDPM beds)</h3>
+        <div class="opt-row">
+          <div class="opt-label">Documentation strong; denials are rare</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_low"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Occasional denials or missed skilled minutes</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_med"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Frequent corrections, denials, or missed minutes</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_high"></div>
+        </div>
+        <div class="opt-row">
+          <div class="opt-label">Unknown / Not sure / Not applicable</div>
+          <div class="opt-input"><span># communities</span><input type="number" min="0" id="p_q10_unk"></div>
+        </div>
+        <div class="totals-line" id="sum_q10"></div>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <h2>4. Run the VOL Health Index</h2>
+      <p class="small">
+        Click Calculate to see your VOL Health stability score, projected stability gain, and illustrative annual economics.
+      </p>
+      <button class="btn" id="calcBtn">Calculate VOL Health Score</button>
+      <button class="btn secondary" id="resetBtn" type="button">Reset</button>
+    </div>
+
+    <div class="card" id="resultsCard" style="display:none;">
+      <div class="results-banner">
+        <h3>Your VOL Health Snapshot</h3>
+        <div class="results-row">
+          <div class="result-pill">
+            <div class="result-label" id="riskLabel">Baseline VOL Health Stability (Current State)</div>
+            <div class="result-value" id="riskScoreLabel">0 / 100</div>
+            <div id="riskBadge" class="badge"></div>
+
+            <div class="small" style="color:#bfbfbf; margin-top:4px;">
+              Higher is better — directional stability signal across Volatility, Operations &amp; Labor.
+            </div>
+          </div>
+          <div class="result-pill">
+            <div class="result-label">Projected Stability Gain (Elasticity Impact)</div>
+            <div class="result-value" id="impactScoreLabel">0 pts</div>
+            <div class="small" style="color:#bfbfbf;">
+              How many stability points a VOL Health model powered by StaffHealth + Accushield Verified could realistically add.
+            </div>
+          </div>
+          <div class="result-pill">
+            <div class="result-label">Stabilized VOL Health Score (Post-Elasticity)</div>
+            <div class="result-value" id="finalScoreLabel">0 / 100</div>
+            <div class="small" style="color:#bfbfbf;">
+              Higher is better — post-elasticity stability profile.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="small" id="modeSummary" style="margin-top:12px;">
+        In Single Community Mode, the VOL Health Volatility Index reflects one building’s volatility, overtime, PBJ exposure,
+        and leadership strain. It is directional, not a survey or audit.
+      </p>
+
+      <div class="grid grid-2" style="margin-top:12px;">
+        <div>
+          <div class="pill-header">Estimated Annual Economics at Stake (Illustrative)</div>
+          <div id="valueSummary">—</div>
+        </div>
+        <div>
+          <div class="pill-header">Quick Read on Staffing Health</div>
+          <div id="profileSummary" class="small" style="font-size:13px;">—</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div class="pill-header">Rate &amp; Model Narrative</div>
+        <div id="rateNarrative" class="small" style="font-size:13px;">—</div>
       </div>
     </div>
 
-    <div style="margin-top:12px;">
-      <div class="pill-header">Rate &amp; Model Narrative</div>
-      <div id="rateNarrative" class="small" style="font-size:13px;">—</div>
+    <div class="card" id="followupCard" style="display:none;">
+      <h2>5. Copyable Summary (Optional)</h2>
+      <p class="small">Copy results into an email, CRM note, or text.</p>
+      <label for="resultsText">Copyable VOL Health Summary</label>
+      <textarea id="resultsText"></textarea>
+      <button class="btn" type="button" id="copyBtn" style="margin-top:10px;">Copy Results</button>
     </div>
-  </div>
 
-  <div class="card" id="followupCard" style="display:none;">
-    <h2>5. Copyable Summary (Optional)</h2>
-    <p class="small">Copy results into an email, CRM note, or text.</p>
-    <label for="resultsText">Copyable VOL Health Summary</label>
-    <textarea id="resultsText"></textarea>
-    <button class="btn" type="button" id="copyBtn" style="margin-top:10px;">Copy Results</button>
+    <footer>StaffHealth + Accushield Verified — VOL Health™ Volatility Index — Prototype</footer>
   </div>
-
 </div>
 
-<footer>StaffHealth + Accushield Verified — VOL Health™ Volatility Index — Prototype</footer>
-<div style="text-align:center; font-size:11px; color:#777; margin-top:6px; opacity:0.75;">
+<div class="footnote">
   Prototype Model v0.5 — VOL Health framework developed independently by Hudson Keel
   for internal evaluation and strategic insight testing.
   Not a final or officially endorsed StaffHealth or Accushield Verified product.
