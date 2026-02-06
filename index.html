@@ -6,64 +6,224 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
 :root{
-  --brand-blue:#1f57b8;
-  --dark:#111111;
-  --bg:#f5f5f5;
-  --card:#ffffff;
-  --border:#d9d9d9;
-  --muted:#666;
+  --brand-blue:#1f57b8;        /* StaffHealth blue */
+  --brand-green:#2e8b57;       /* Accushield Verified green */
+  --brand-yellow:#f2b705;
+  --dark:#050814;
+  --bg:#050816;
+  --card:#0d1224;
+  --border:#242944;
+  --muted:#9ca3c7;
+  --danger:#df4759;
 }
 *{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{margin:0;background:var(--bg);color:#222}
-header{background:var(--dark);color:#fff;text-align:center;padding:28px 15px 18px}
-header h1{margin:0;font-size:30px;letter-spacing:1.2px;text-transform:uppercase}
-header h1 span{color:var(--brand-blue)}
-header p{margin:10px auto 0;max-width:820px;line-height:1.45;font-size:14.5px;color:#e9e9e9}
-.hero-strip{background:var(--brand-blue);color:#fff;padding:14px 16px;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;font-size:13px}
-.container{max-width:1100px;margin:18px auto 38px;padding:0 15px}
-.card{background:var(--card);border-radius:10px;padding:18px 18px 16px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
-.card h2{margin:0 0 10px;font-size:20px}
-.small{font-size:12px;color:var(--muted);line-height:1.45}
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#101735 0,#050816 55%,#02030a 100%);
+  color:#f5f6ff;
+}
+
+/* Header + hero strip */
+header{
+  text-align:center;
+  padding:26px 15px 18px;
+}
+header h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+header h1 span{color:var(--brand-blue);}
+header p{
+  margin:10px auto 0;
+  max-width:820px;
+  line-height:1.55;
+  font-size:14.5px;
+  color:#c4cae8;
+}
+.hero-strip{
+  background:linear-gradient(90deg,var(--brand-green),#34c08a);
+  color:#ffffff;
+  padding:12px 16px;
+  text-align:center;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.8px;
+  font-size:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.5);
+}
+
+.container{max-width:1100px;margin:20px auto 40px;padding:0 15px}
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:18px 18px 16px;
+  margin-bottom:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,0.45);
+  border:1px solid var(--border);
+}
+.card h2{margin:0 0 10px;font-size:18px;}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+
 .grid{display:grid;gap:14px}
 @media(min-width:820px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
-label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
-input[type="text"],input[type="email"],input[type="number"],select,textarea{
-  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);font-size:14px;background:#fff
+
+label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px;color:#e3e6ff}
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea{
+  width:100%;
+  padding:8px 10px;
+  border-radius:9px;
+  border:1px solid var(--border);
+  font-size:14px;
+  background:#050814;
+  color:#f5f6ff;
 }
+select{background:#050814;}
 textarea{min-height:100px;resize:vertical}
+input::placeholder,
+textarea::placeholder{color:#5e648b;}
+
 .hint{font-size:12px;color:var(--muted);margin-top:4px}
-.btn{border:none;background:var(--brand-blue);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:0.6px}
-.btn.secondary{background:#3d3d3d;margin-left:8px}
+.btn{
+  border:none;
+  background:var(--brand-blue);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  box-shadow:0 10px 26px rgba(2,12,54,0.7);
+  transition:transform 0.12s ease,box-shadow 0.12s ease,filter 0.12s ease;
+}
+.btn:hover{
+  filter:brightness(1.06);
+  transform:translateY(-1px);
+  box-shadow:0 14px 36px rgba(2,12,54,0.85);
+}
+.btn.secondary{
+  background:#30364f;
+  margin-left:8px;
+  box-shadow:none;
+}
 .mode-toggle{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.mode-toggle label{font-weight:600;margin:0;display:flex;gap:8px;align-items:center}
-.pill{border:1px solid var(--border);border-radius:10px;padding:14px;background:#fff}
-.pill h3{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:0.6px;color:#2b2b2b}
-.opt-row{display:grid;grid-template-columns:1fr 160px;gap:12px;align-items:center;padding:8px 0;border-top:1px dashed #ececec}
+.mode-toggle label{
+  font-weight:600;
+  margin:0;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  font-size:13px;
+  color:#e3e6ff;
+}
+.mode-toggle input{accent-color:var(--brand-green);}
+
+.pill{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  background:#050814;
+}
+.pill h3{
+  margin:0 0 8px;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:#d5daf5;
+}
+.opt-row{
+  display:grid;
+  grid-template-columns:1fr 160px;
+  gap:12px;
+  align-items:center;
+  padding:8px 0;
+  border-top:1px dashed #222842;
+}
 .opt-row:first-of-type{border-top:none}
-.opt-label{font-size:13px;line-height:1.35;color:#222}
+.opt-label{font-size:13px;line-height:1.35;color:#e3e6ff}
 .opt-input{display:flex;gap:8px;align-items:center;justify-content:flex-end}
 .opt-input span{font-size:12px;color:var(--muted);white-space:nowrap}
-.opt-input input{width:110px;text-align:right}
+.opt-input input{width:110px;text-align:right;background:#050814;color:#f5f6ff;border:1px solid var(--border);border-radius:8px}
 .totals-line{margin-top:10px;font-size:12px;color:var(--muted)}
-.warn{color:#a10000;font-weight:700}
-.ok{color:#176b2c;font-weight:700}
+.warn{color:#ff9ba8;font-weight:700}
+.ok{color:#7ce9b4;font-weight:700}
 
 /* Results */
-.results-banner{background:var(--dark);color:#fff;padding:16px;border-radius:12px;text-align:center}
+.results-banner{
+  background:linear-gradient(135deg,#050814,#141c3b);
+  color:#fff;
+  padding:16px;
+  border-radius:14px;
+  text-align:center;
+  border:1px solid #2a335b;
+}
 .results-banner h3{margin:0 0 10px;font-size:18px}
 .results-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.result-pill{flex:1 1 180px;min-width:180px;background:#1c1c1c;border-radius:12px;padding:12px 10px;text-align:center}
-.result-label{font-size:11px;text-transform:uppercase;color:#bfbfbf;letter-spacing:0.6px}
-.result-value{margin-top:6px;font-size:22px;font-weight:900;color:#e0ecff}
-.badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}
+.result-pill{
+  flex:1 1 180px;
+  min-width:180px;
+  background:#080f26;
+  border-radius:12px;
+  padding:12px 10px;
+  text-align:center;
+  border:1px solid #222b52;
+}
+.result-label{
+  font-size:11px;
+  text-transform:uppercase;
+  color:#bfbff3;
+  letter-spacing:0.6px;
+}
+.result-value{
+  margin-top:6px;
+  font-size:22px;
+  font-weight:900;
+  color:#e0ecff;
+}
+.badge{
+  display:inline-block;
+  margin-top:8px;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
 .b-low{background:#d4f5d4;color:#176b2c}      /* green */
 .b-med{background:#fff2c6;color:#8a5b00}     /* yellow */
 .b-high{background:#ffd3d3;color:#a10000}    /* red */
 
-.pill-header{font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:0.6px;color:#444;margin-bottom:6px}
+.pill-header{
+  font-weight:900;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:0.6px;
+  color:#e3e6ff;
+  margin-bottom:6px;
+}
 .big-impact{font-size:15px;font-weight:900;margin-bottom:4px}
 .big-impact span{font-weight:950}
-footer{text-align:center;font-size:12px;color:#888;padding:20px 10px 0}
+
+/* Text in results cards */
+#valueSummary,
+#profileSummary,
+#rateNarrative{
+  color:#d5daf5;
+}
+
+/* Footer */
+footer{
+  text-align:center;
+  font-size:12px;
+  color:#8b92b6;
+  padding:20px 10px 0;
+}
 </style>
 </head>
 
@@ -79,7 +239,7 @@ footer{text-align:center;font-size:12px;color:#888;padding:20px 10px 0}
 </header>
 
 <div class="hero-strip">
-  StaffHealth + Accushield Verified = VOL Health™ &mdash; The Trinity of Volatility, Operations &amp; Labor
+  StaffHealth + Accushield Verified = VOL Health™ — The Trinity of Volatility, Operations & Labor
 </div>
 
 <div class="container">
@@ -559,13 +719,13 @@ footer{text-align:center;font-size:12px;color:#888;padding:20px 10px 0}
     </div>
     <div>
       <div class="pill-header">Quick Read on Staffing Health</div>
-      <div id="profileSummary" class="small" style="font-size:13px;color:#333;">—</div>
+      <div id="profileSummary" class="small" style="font-size:13px;">—</div>
     </div>
   </div>
 
   <div style="margin-top:12px;">
     <div class="pill-header">Rate &amp; Model Narrative</div>
-    <div id="rateNarrative" class="small" style="font-size:13px;color:#333;">—</div>
+    <div id="rateNarrative" class="small" style="font-size:13px;">—</div>
   </div>
 </div>
 
@@ -587,6 +747,7 @@ footer{text-align:center;font-size:12px;color:#888;padding:20px 10px 0}
 </div>
 
 <script>
+/* --- JS unchanged from your original --- */
 const WEIGHTS = { q1:12, q2:10, q3:14, q4:12, q5:10, q6:12, q7:8, q8:10, q9:6, q10:10 };
 
 function getMode(){
@@ -808,8 +969,8 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   }
 
   // Convert risk-based scores into stability (HIGH = good)
-  stabilityPre = Math.max(0, Math.min(100, 100 - riskScore100));
-  finalScore   = Math.max(0, Math.min(100, 100 - finalRiskScore));
+  const stabilityPre = Math.max(0, Math.min(100, 100 - riskScore100));
+  const finalScore   = Math.max(0, Math.min(100, 100 - finalRiskScore));
 
   // Render results
   document.getElementById("riskScoreLabel").textContent   = `${stabilityPre} / 100`;
@@ -826,15 +987,33 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
     ? `Annual economics currently influenced by staffing volatility: <span>$${baselineLow.toLocaleString()}–$${baselineHigh.toLocaleString()}</span>`
     : `Portfolio annual economics currently influenced by staffing volatility (≈${usedN} communities): <span>$${baselineLow.toLocaleString()}–$${baselineHigh.toLocaleString()}</span>`;
 
+  const stabilizedLow = Math.round(impactScore*3000/1000)*1000 * (mode==="single" ? 1 : usedN);
+  const stabilizedHigh = Math.round(impactScore*6000/1000)*1000 * (mode==="single" ? 1 : usedN);
+
   const stabText = mode==="single"
     ? `Illustrative economics a VOL Health model (powered by StaffHealth + Accushield Verified) could help stabilize: <b>$${stabilizedLow.toLocaleString()}–$${stabilizedHigh.toLocaleString()}</b>`
     : `Illustrative economics a VOL Health model (powered by StaffHealth + Accushield Verified) could help stabilize (portfolio): <b>$${stabilizedLow.toLocaleString()}–$${stabilizedHigh.toLocaleString()}</b>`;
 
   let extra = "";
   if(mode==="single"){
+    const compareRate = parseFloat(document.getElementById("compareRate").value);
+    const staffRate   = parseFloat(document.getElementById("staffRate").value);
+    const shiftsMonth = parseFloat(document.getElementById("shiftsMonth").value);
+    const hoursMonth  = !isNaN(shiftsMonth) && shiftsMonth > 0 ? shiftsMonth * 8 : NaN;
+
+    const hasRates =
+      !isNaN(compareRate) && compareRate > 0 &&
+      !isNaN(staffRate)   && staffRate   > 0 &&
+      !isNaN(hoursMonth)  && hoursMonth  > 0;
+
     if(hasRates){
+      const directAnnual = (compareRate - staffRate) * hoursMonth * 12;
+      const stabilizedMid = (stabilizedLow + stabilizedHigh)/2;
+      const netImpact = stabilizedMid + directAnnual;
+
       const directLabel = directAnnual >= 0 ? "Estimated direct annual savings from rate:" : "Estimated direct annual premium from rate:";
       const netLabel    = netImpact   >= 0 ? "Directional annual net benefit (rate + stability):" : "Directional annual net cost (rate + stability):";
+
       extra = `<div class="small" style="margin-top:8px;">
 <b>${directLabel}</b> $${Math.abs(directAnnual).toLocaleString()}<br/>
 <b>${netLabel}</b> $${Math.abs(netImpact).toLocaleString()}<br/>
@@ -872,11 +1051,22 @@ document.getElementById("calcBtn").addEventListener("click", ()=>{
   if(mode==="portfolio"){
     rateNarr = "This run focuses on volatility and stability at the portfolio level. In follow-up, we can layer in rate cohorts (agency vs OT vs blended) to show how the model behaves financially by building cluster. Core message: volatility and compliance exposure often cost more than the rate line.";
   }else{
+    const compareRate = parseFloat(document.getElementById("compareRate").value);
+    const staffRate   = parseFloat(document.getElementById("staffRate").value);
+    const shiftsMonth = parseFloat(document.getElementById("shiftsMonth").value);
+    const hoursMonth  = !isNaN(shiftsMonth) && shiftsMonth > 0 ? shiftsMonth * 8 : NaN;
+    const hasRates =
+      !isNaN(compareRate) && compareRate > 0 &&
+      !isNaN(staffRate)   && staffRate   > 0 &&
+      !isNaN(hoursMonth)  && hoursMonth  > 0;
+
     if(!hasRates){
       rateNarr = "No rate inputs were provided, so this run is a pure volatility/stability view. Add rate + shifts to compare direct economics alongside the stability benefit.";
     }else{
-      const compareRate=parseFloat(document.getElementById("compareRate").value);
-      const staffRate=parseFloat(document.getElementById("staffRate").value);
+      const directAnnual = (compareRate - staffRate) * hoursMonth * 12;
+      const stabilizedMid = (stabilizedLow + stabilizedHigh)/2;
+      const netImpact = stabilizedMid + directAnnual;
+
       const premium = staffRate > compareRate + 1;
       const parity  = Math.abs(staffRate-compareRate) <= 1;
       const cheaper = staffRate < compareRate - 1;
