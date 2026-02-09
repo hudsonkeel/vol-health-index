@@ -6,49 +6,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
 :root{
+  /* Shared brand colors (match landing page) */
   --brand-blue:#1f57b8;        /* StaffHealth blue */
   --brand-green:#2e8b57;       /* Accushield Verified green */
   --brand-yellow:#f2b705;
 
-  /* Page chrome (match landing feel) */
-  --outer-bg-1:#5b6270;
-  --outer-bg-2:#3a3f48;
-  --outer-bg-3:#2a2e35;
-  --inner-bg-1:#191e2b;
-  --inner-bg-2:#0b0f19;
-  --inner-bg-3:#050814;
-
-  /* Cards + text */
-  --card:#141b2c;
-  --border:#262f46;
-  --muted:#a6aec9;
+  /* Core theme (copied from landing page) */
+  --dark:#050814;
+  --bg:#050816;
+  --card:#0d1224;
+  --muted:#9399b3;
+  --border:#242944;
   --danger:#df4759;
 }
+
+/* Global base */
 *{
   box-sizing:border-box;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-/* Outer page background (matches landing page shell) */
+/* Outer page background (match landing page body) */
 body{
   margin:0;
   min-height:100vh;
   padding:24px 12px 32px;
-  background:radial-gradient(circle at top,var(--outer-bg-1) 0,var(--outer-bg-2) 45%,var(--outer-bg-3) 100%);
+  background:#1b1f2f;           /* same as landing page body */
   color:#f5f6ff;
 }
 
-/* Inner “card” shell like the landing page */
+/* Inner “card shell” (match landing page .page gradient) */
 .shell{
-  max-width:1160px;
+  max-width:1080px;
   margin:0 auto;
   padding:24px 24px 36px;
-  border-radius:28px;
-  background:radial-gradient(circle at top,var(--inner-bg-1) 0,var(--inner-bg-2) 55%,var(--inner-bg-3) 100%);
-  box-shadow:0 22px 60px rgba(0,0,0,0.78);
+  border-radius:26px;
+  background:radial-gradient(
+    circle at top,
+    #1a2338 0%,
+    #111829 55%,
+    #0c1220 100%
+  );
+  box-shadow:0 22px 80px rgba(0,0,0,0.7);
 }
 
-/* Header + hero strip */
+/* Header */
 header{
   text-align:center;
   padding:6px 15px 12px;
@@ -68,7 +70,7 @@ header p{
   color:#c4cae8;
 }
 
-/* Green hero bar */
+/* Green hero bar (keep, but use brand green) */
 .hero-strip{
   background:linear-gradient(90deg,var(--brand-green),#34c08a);
   color:#ffffff;
@@ -79,18 +81,20 @@ header p{
   letter-spacing:0.8px;
   font-size:12px;
   box-shadow:0 8px 20px rgba(0,0,0,0.55);
-  max-width:1100px;
+  max-width:1030px;
   margin:4px auto 12px;
   border-radius:999px;
 }
 
-.container{max-width:1100px;margin:20px auto 0;padding:0 15px}
+/* Generic layout / card styles */
+.container{max-width:1030px;margin:20px auto 0;padding:0 15px}
+
 .card{
   background:var(--card);
   border-radius:16px;
   padding:18px 18px 16px;
   margin-bottom:16px;
-  box-shadow:0 14px 32px rgba(0,0,0,0.55);
+  box-shadow:0 14px 32px rgba(0,0,0,0.6);
   border:1px solid var(--border);
 }
 .card h2{margin:0 0 10px;font-size:18px;}
@@ -125,6 +129,8 @@ input::placeholder,
 textarea::placeholder{color:#5e648b;}
 
 .hint{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* Buttons – match landing page CTA feel */
 .btn{
   border:none;
   background:var(--brand-blue);
@@ -149,6 +155,8 @@ textarea::placeholder{color:#5e648b;}
   margin-left:8px;
   box-shadow:none;
 }
+
+/* Mode toggle */
 .mode-toggle{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .mode-toggle label{
   font-weight:600;
@@ -161,9 +169,10 @@ textarea::placeholder{color:#5e648b;}
 }
 .mode-toggle input{accent-color:var(--brand-green);}
 
+/* Question “pill” containers (portfolio) */
 .pill{
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:14px;
   padding:14px;
   background:#050814;
 }
@@ -198,25 +207,28 @@ textarea::placeholder{color:#5e648b;}
 .warn{color:#ff9ba8;font-weight:700}
 .ok{color:#7ce9b4;font-weight:700}
 
-/* Results */
+/* RESULTS – styled like landing hero snapshot card */
 .results-banner{
-  background:linear-gradient(135deg,#050814,#171f3a);
+  background:radial-gradient(circle at top,#1c2245 0,#0b1020 50%,#050814 100%);
   color:#fff;
   padding:16px;
-  border-radius:16px;
+  border-radius:18px;
   text-align:center;
-  border:1px solid #2a335b;
+  border:1px solid rgba(72,86,155,0.8);
+  box-shadow:0 14px 40px rgba(2,5,20,0.9);
 }
 .results-banner h3{margin:0 0 10px;font-size:18px}
 .results-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+
+/* Inner result pills – lined up with hero metric pills */
 .result-pill{
   flex:1 1 180px;
   min-width:180px;
-  background:#080f26;
+  background:rgba(12,13,32,0.9);
   border-radius:12px;
   padding:12px 10px;
   text-align:center;
-  border:1px solid #222b52;
+  border:1px solid #252b49;
 }
 .result-label{
   font-size:11px;
